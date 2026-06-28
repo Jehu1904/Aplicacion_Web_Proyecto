@@ -3,51 +3,87 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Propuesta de solución para resolver problemas de gestión en los comercios locales de Manta.">
-    <title>Proyecto Autónomo - Solución Local</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Manta Tattoo Studio - Gestión Integrada</title>
+    <link rel="stylesheet" href="/style.css">
 </head>
 <body>
 
     <header>
-        <div class="container">
-            <h1>NombreDelProyecto</h1>
-            <p>Una solución real para un problema real en nuestra comunidad.</p>
-        </div>
+        <h1>Manta Tattoo Co.</h1>
+        <p>Plataforma de Cotización y Gestión para Artistas Locales</p>
     </header>
 
-    <main>
-        <section id="problema">
-            <div class="container">
-                <h2>El Problema que Identificamos</h2>
-                <p>
-                    En el entorno local, muchas personas enfrentan dificultades críticas al intentar realizar sus actividades diarias de manera eficiente debido a la falta de herramientas centralizadas.
-                </p>
+    <main id="contenedor-aplicacion">
+
+        <!-- MÓDULO 1: COTIZADOR AUTOMATIZADO (Jehu Villamar) -->
+        <section id="modulo-cotizador" class="modulo-card">
+            <h2>🔮 Cotizador de Presupuestos</h2>
+            <p>Calcula el costo estimado de tu pieza de forma autónoma antes de agendar.</p>
+            
+            <form id="form-cotizador" onsubmit="return false;">
+                <div class="control-formulario">
+                    <label for="input-cm">Tamaño aproximado (en centímetros lineales):</label>
+                    <input type="number" id="input-cm" min="2" max="45" placeholder="Ej. 10" required>
+                    <span id="error-cm" class="msg-error"></span>
+                </div>
+
+                <div class="control-formulario">
+                    <label for="select-zona">Zona del cuerpo:</label>
+                    <select id="select-zona" required>
+                        <option value="">-- Selecciona una zona --</option>
+                        <option value="brazo">Brazo</option>
+                        <option value="antebrazo">Antebrazo</option>
+                        <option value="pierna">Pierna</option>
+                        <option value="costillas">Costillas</option>
+                    </select>
+                </div>
+
+                <button type="button" id="btn-calcular">Calcular Presupuesto</button>
+            </form>
+
+            <div id="contenedor-resultado">
+                <p id="resultado-costo">Total Estimado: $0.00</p>
             </div>
         </section>
 
-        <section id="audiencia">
-            <div class="container">
-                <h2>A Quién Afecta</h2>
-                <p>
-                    Nuestra investigación se centra específicamente en apoyar a los ciudadanos y trabajadores de la región de Manabí que sufren este inconveniente diariamente.
-                </p>
+        <!-- MÓDULO 2: PORTAFOLIO DINÁMICO Y FAQ (Jordan Solórzano) -->
+        <section id="modulo-portafolio" class="modulo-card">
+            <h2>🎨 Catálogo & Preguntas Frecuentes</h2>
+            <div id="contenedor-faq" class="acordeon">
+                <div class="faq-item">
+                    <button class="faq-pregunta" type="button">¿Cómo funciona la política de abonos?</button>
+                    <div class="faq-respuesta" style="display: none;">
+                        <p>Para asegurar tu cita se requiere un abono del 30%. Si necesitas reprogramar, debes avisar con un mínimo de 48 horas de anticipación.</p>
+                    </div>
+                </div>
             </div>
         </section>
 
-        <section id="proximamente">
-            <div class="container">
-                <h2>Próximamente</h2>
-                <p>Estamos construyendo una plataforma modular moderna e interactiva para transformar esta realidad. ¡Mantente atento!</p>
-            </div>
+        <!-- MÓDULO 3: REGISTRO DE INTERESADOS (Jesús Macías) -->
+        <section id="modulo-registro" class="modulo-card">
+            <h2>📅 Lista de Espera Prioritaria</h2>
+            <form id="form-registro" onsubmit="return false;">
+                <div class="control-formulario">
+                    <label for="input-nombre">Nombre Completo:</label>
+                    <input type="text" id="input-nombre" placeholder="Tu nombre" required>
+                </div>
+                <div class="control-formulario">
+                    <label for="input-email">Correo Electrónico:</label>
+                    <input type="email" id="input-email" placeholder="ejemplo@correo.com" required>
+                    <span id="error-email" class="msg-error"></span>
+                </div>
+                <button type="button" id="btn-registrar">Unirse a la lista</button>
+            </form>
+            <div id="msg-registro-exito"></div>
         </section>
+
     </main>
 
     <footer>
-        <div class="container">
-            <p>&copy; 2026 - Equipo de Desarrollo Software 4to B (ULEAM). Todos los derechos reservados.</p>
-        </div>
+        <p>&copy; 2026 - Grupo G | Aplicaciones para el Cliente Web</p>
     </footer>
 
+    <!-- Conexión al script principal en la carpeta src -->
+    <script type="module" src="/src/main.ts"></script>
 </body>
 </html>
