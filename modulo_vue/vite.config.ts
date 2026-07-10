@@ -1,17 +1,16 @@
 /**
  * @file vite.config.ts
- * @description Archivo de configuración simplificado de Vite para el módulo de Vue 3.
- * Utiliza plugins oficiales estándar para evitar conflictos de rutas.
+ * @description Configuración de Vite para el módulo de Vue 3.
  */
 import { defineConfig } from 'vite';
-import vue from '@vitejs/plugin-vue'; // Importación del plugin oficial de Vue
+import vue from '@vitejs/plugin-vue';
 
 export default defineConfig({
-  // Registramos el plugin oficial para compilar los componentes .vue
   plugins: [vue()],
-  
+  // ¡ESTA LÍNEA ES LA CLAVE!
+  // Le dice a Vite: "cuando cargues archivos, busca desde esta ruta relativa"
+  base: '/modulo_vue/' , 
   server: {
-    // Forzamos el puerto exclusivo para tu exposición de Vue 3
     port: 5176,
     strictPort: true
   }

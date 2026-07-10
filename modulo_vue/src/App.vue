@@ -8,7 +8,7 @@
 
 <template>
     <div id="contenedor-global-app">
-        <!-- Espejo dinámico donde el enrutador insertará e intercambiará las vistas según la URL -->
+        <!-- donde el enrutador insertará e intercambiará las vistas según la URL -->
         <router-view />
     </div>
 </template>
