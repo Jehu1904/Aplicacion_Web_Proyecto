@@ -1,0 +1,135 @@
+/**
+ * @file dashboard.css
+ * @description Estilos para el Dashboard con soporte para los nuevos campos del contrato.
+ */
+
+.dashboard-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.navbar-compartida {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 0;
+    border-bottom: 1px solid #29292e;
+    margin-bottom: 30px;
+}
+
+.logo {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: #e23e3e;
+}
+
+.link-activo {
+    color: #e23e3e;
+    text-decoration: none;
+    font-weight: 500;
+    border-bottom: 2px solid #e23e3e;
+    padding-bottom: 4px;
+}
+
+.grid-contenido {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+}
+
+/* Ajuste para pantallas pequeñas (opcional, mejora la experiencia) */
+@media (max-width: 768px) {
+    .grid-contenido {
+        grid-template-columns: 1fr;
+    }
+}
+
+.panel-formulario,
+.panel-listado {
+    background-color: #1a1a1e;
+    border: 1px solid #29292e;
+    padding: 25px;
+    border-radius: 8px;
+}
+
+h2 {
+    font-size: 1.25rem;
+    margin-bottom: 20px;
+    color: #ffffff;
+}
+
+.campo {
+    margin-bottom: 15px; /* Ajustado ligeramente */
+}
+
+label {
+    display: block;
+    font-size: 0.85rem;
+    color: #a8a8b3;
+    margin-bottom: 6px;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="date"], /* Agregado por si usas input date */
+select,
+textarea {
+    width: 100%;
+    background-color: #121214;
+    border: 1px solid #29292e;
+    color: #fff;
+    padding: 10px 14px;
+    border-radius: 6px;
+    font-family: inherit;
+    box-sizing: border-box; /* Importante para que no se desborde el ancho */
+}
+
+.contenedor-costo {
+    background-color: #121214;
+    padding: 15px;
+    border-radius: 6px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    border-left: 4px solid #e23e3e;
+}
+
+.contenedor-costo strong {
+    color: #e23e3e;
+    font-size: 1.3rem;
+}
+
+button {
+    width: 100%;
+    background-color: #e23e3e;
+    color: #fff;
+    border: none;
+    padding: 12px;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+button:hover {
+    background-color: #c63232;
+}
+
+.tarjeta-cita-item {
+    background-color: #121214;
+    border: 1px solid #29292e;
+    padding: 15px;
+    border-radius: 6px;
+    margin-bottom: 12px;
+}
+
+.btn-detalle-enlace {
+    display: inline-block;
+    font-size: 0.85rem;
+    color: #e23e3e;
+    text-decoration: none;
+    font-weight: 500;
+    margin-top: 10px;
+}

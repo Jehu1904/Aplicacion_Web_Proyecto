@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manta Tattoo | Portal Oficial</title>
+    <link rel="stylesheet" href="/style/style.css">
+</head>
+<body>
+    <header class="navbar">
+        <div class="logo">MANTA TATTOO</div>
+    </header>
+
+    <section id="hero">
+        <h1>Arte en tu piel</h1>
+        <p>Expertos en tatuajes personalizados y piercings.</p>
+    </section>
+
+    <section id="login-container">
+        <h2>Acceso al Sistema</h2>
+        <input type="email" id="email" placeholder="Correo electrónico">
+        <input type="password" id="password" placeholder="Contraseña">
+        
+        <div class="botones-login">
+            <button onclick="procesarAcceso('login', 'cliente')">Ingresar como Cliente</button>
+            <button onclick="procesarAcceso('login', 'admin')" class="btn-admin">Ingresar como Admin</button>
+        </div>
+        
+        <p style="margin-top: 15px;">
+            ¿No tienes cuenta? <a href="#" onclick="procesarAcceso('registro')">Regístrate aquí</a>
+        </p>
+    </section>
+
+    <script type="module" src="/src/main.ts"></script>
+</body>
+</html>
