@@ -1,0 +1,16 @@
+/**
+ * @file app.css
+ * @description Estilos globales de reinicio y tipografía para el módulo base de Vue.
+ */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: #121214;
+    color: #ffffff;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    -webkit-font-smoothing: antialiased;
+}
