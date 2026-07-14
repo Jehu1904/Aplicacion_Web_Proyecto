@@ -3,34 +3,295 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Manta Tattoo | Portal Oficial</title>
+    <title>INK & IRON | Estudio de Tatuajes Profesional</title>
+    <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@300;400;600;700;800&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/style/style.css">
 </head>
-<body>
-    <header class="navbar">
-        <div class="logo">MANTA TATTOO</div>
-    </header>
-
-    <section id="hero">
-        <h1>Arte en tu piel</h1>
-        <p>Expertos en tatuajes personalizados y piercings.</p>
-    </section>
-
-    <section id="login-container">
-        <h2>Acceso al Sistema</h2>
-        <input type="email" id="email" placeholder="Correo electrónico">
-        <input type="password" id="password" placeholder="Contraseña">
+<body class="bg-[#0f0f0f] text-gray-100 font-['Raleway',sans-serif]">
+    
+    <!-- CONTENEDOR DE LOGIN -->
+    <div id="login-section" class="min-h-screen bg-gradient-to-b from-[#1a1a1a] to-[#0f0f0f] flex items-center justify-center px-4">
+        <!-- Fondo de hero con overlay -->
+        <div class="absolute inset-0 opacity-10 bg-cover bg-center" style="background-image: url('data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 1200 600%22><path fill=%22%23d97706%22 d=%22M0,150 Q300,50 600,150 T1200,150 L1200,600 L0,600 Z%22/></svg>')"></div>
         
-        <div class="botones-login">
-            <button onclick="procesarAcceso('login', 'cliente')">Ingresar como Cliente</button>
-            <button onclick="procesarAcceso('login', 'admin')" class="btn-admin">Ingresar como Admin</button>
+        <div class="relative z-10 max-w-md w-full">
+            <!-- Logo/Brand -->
+            <div class="text-center mb-12">
+                <h1 class="font-['Playfair_Display'] text-5xl font-bold text-white mb-2">INK & IRON</h1>
+                <p class="text-amber-400 font-light tracking-widest text-sm">ESTUDIO DE TATUAJES PROFESIONAL</p>
+                <p class="text-gray-400 text-sm mt-3">Donde el arte se convierte en piel</p>
+            </div>
+
+            <!-- Formulario de Login -->
+            <form id="login-form" class="bg-[#1a1a1a] border border-white/10 rounded-lg p-8 backdrop-blur-sm space-y-5">
+                
+                <div>
+                    <label for="email" class="block text-sm font-medium text-gray-300 mb-2">Correo Electrónico</label>
+                    <input 
+                        id="email" 
+                        type="email" 
+                        required
+                        placeholder="tu@correo.com"
+                        class="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400 transition"
+                    >
+                </div>
+
+                <div>
+                    <label for="password" class="block text-sm font-medium text-gray-300 mb-2">Contraseña</label>
+                    <input 
+                        id="password" 
+                        type="password" 
+                        required
+                        placeholder="••••••••"
+                        class="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400 transition"
+                    >
+                </div>
+
+                <div id="error-message" class="hidden bg-red-500/10 border border-red-500/20 rounded-lg p-3 text-red-400 text-sm"></div>
+
+                <!-- Botones de Login -->
+                <div class="grid grid-cols-2 gap-3 pt-4">
+                    <button 
+                        type="button"
+                        onclick="procesarAcceso('login', 'cliente')"
+                        class="bg-amber-500 hover:bg-amber-600 text-black font-semibold py-3 rounded-lg transition duration-200 text-sm tracking-wide"
+                    >
+                        Entrar como Cliente
+                    </button>
+                    <button 
+                        type="button"
+                        onclick="procesarAcceso('login', 'admin')"
+                        class="bg-white/10 hover:bg-white/20 border border-white/20 text-white font-semibold py-3 rounded-lg transition duration-200 text-sm tracking-wide"
+                    >
+                        Administrador
+                    </button>
+                </div>
+
+                <div class="flex items-center gap-2 my-6">
+                    <div class="flex-1 h-px bg-white/10"></div>
+                    <span class="text-xs text-gray-500">O</span>
+                    <div class="flex-1 h-px bg-white/10"></div>
+                </div>
+
+                <p class="text-center text-sm text-gray-400">
+                    ¿No tienes cuenta?
+                    <button type="button" onclick="mostrarRegistro()" class="text-amber-400 hover:text-amber-300 font-medium transition">
+                        Solicita acceso aquí
+                    </button>
+                </p>
+            </form>
+
+            <!-- Footer -->
+            <div class="mt-8 text-center text-xs text-gray-500">
+                <p>© 2026 INK & IRON Studio. Todos los derechos reservados.</p>
+                <p class="mt-2">Sistema de Gestión Integrado v1.0</p>
+            </div>
         </div>
-        
-        <p style="margin-top: 15px;">
-            ¿No tienes cuenta? <a href="#" onclick="procesarAcceso('registro')">Regístrate aquí</a>
-        </p>
-    </section>
+    </div>
 
-    <script type="module" src="/src/main.ts"></script>
+    <!-- CONTENEDOR DE APLICACIÓN (oculto inicialmente) -->
+    <div id="app-section" class="hidden min-h-screen bg-[#0f0f0f]">
+        
+        <!-- Navegación -->
+        <nav class="fixed top-0 w-full z-50 bg-[#0f0f0f]/95 backdrop-blur-md border-b border-white/5">
+            <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+                <div class="flex items-center gap-4">
+                    <h1 class="font-['Playfair_Display'] text-2xl font-bold text-white">INK & IRON</h1>
+                    <span id="user-role" class="text-xs bg-amber-500/20 text-amber-400 px-3 py-1 rounded-full font-medium"></span>
+                </div>
+                <div class="flex items-center gap-6">
+                    <div class="flex gap-1 bg-white/5 rounded-lg p-1">
+                        <button onclick="cargarModulo('home')" class="nav-btn active px-4 py-2 rounded text-sm font-medium transition" data-module="home">Inicio</button>
+                        <button onclick="cargarModulo('react')" class="nav-btn px-4 py-2 rounded text-sm font-medium transition" data-module="react">Catálogo</button>
+                        <button onclick="cargarModulo('vue')" class="nav-btn px-4 py-2 rounded text-sm font-medium transition" data-module="vue">Reservas</button>
+                        <button onclick="cargarModulo('admin')" id="admin-btn" class="nav-btn px-4 py-2 rounded text-sm font-medium transition hidden" data-module="admin">Admin</button>
+                    </div>
+                    <button onclick="cerrarSesion()" class="text-gray-400 hover:text-red-400 transition text-sm font-medium">Cerrar sesión</button>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Contenido -->
+        <div class="pt-20">
+            <!-- Pantalla de Inicio -->
+            <div id="home-view" class="hidden">
+                <div class="max-w-6xl mx-auto px-6 py-12">
+                    <div class="grid md:grid-cols-3 gap-6">
+                        <!-- Card Catálogo -->
+                        <div class="bg-gradient-to-br from-amber-900/20 to-amber-900/5 border border-amber-500/20 rounded-lg p-8 hover:border-amber-500/40 transition cursor-pointer" onclick="cargarModulo('react')">
+                            <div class="text-4xl mb-4">🎨</div>
+                            <h3 class="text-xl font-bold mb-2">Catálogo de Estilos</h3>
+                            <p class="text-gray-400 text-sm mb-4">Explora nuestra galería de diseños y trabajos previos. Inspiración para tu próximo tatuaje.</p>
+                            <span class="text-amber-400 text-sm font-medium">Ver más →</span>
+                        </div>
+
+                        <!-- Card Reservas -->
+                        <div class="bg-gradient-to-br from-blue-900/20 to-blue-900/5 border border-blue-500/20 rounded-lg p-8 hover:border-blue-500/40 transition cursor-pointer" onclick="cargarModulo('vue')">
+                            <div class="text-4xl mb-4">📅</div>
+                            <h3 class="text-xl font-bold mb-2">Agendar Cita</h3>
+                            <p class="text-gray-400 text-sm mb-4">Reserva tu sesión de tatuaje con nuestros artistas profesionales. Disponibilidad en tiempo real.</p>
+                            <span class="text-blue-400 text-sm font-medium">Reservar →</span>
+                        </div>
+
+                        <!-- Card Admin (solo si es admin) -->
+                        <div id="admin-card" class="hidden bg-gradient-to-br from-purple-900/20 to-purple-900/5 border border-purple-500/20 rounded-lg p-8 hover:border-purple-500/40 transition cursor-pointer" onclick="cargarModulo('admin')">
+                            <div class="text-4xl mb-4">⚙️</div>
+                            <h3 class="text-xl font-bold mb-2">Panel de Control</h3>
+                            <p class="text-gray-400 text-sm mb-4">Administra citas, artistas, diseños y configuración del estudio.</p>
+                            <span class="text-purple-400 text-sm font-medium">Acceder →</span>
+                        </div>
+                    </div>
+
+                    <!-- Información del estudio -->
+                    <div class="mt-12 bg-white/5 border border-white/10 rounded-lg p-8">
+                        <h2 class="font-['Playfair_Display'] text-3xl font-bold mb-4">INK & IRON Studio</h2>
+                        <p class="text-gray-300 mb-4">Donde el arte se convierte en piel. Nuestro equipo de artistas profesionales está listo para traer tus ideas a la vida con precisión y creatividad.</p>
+                        <div class="grid md:grid-cols-3 gap-4 mt-6 text-sm text-gray-400">
+                            <div>✓ Artistas Certificados</div>
+                            <div>✓ Equipos Esterilizados</div>
+                            <div>✓ Garantía de Calidad</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Contenedor de iFrame para módulos -->
+            <div id="module-view" class="hidden min-h-[calc(100vh-80px)]">
+                <iframe id="module-frame" class="w-full h-[calc(100vh-80px)] border-0"></iframe>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { supabase } from '/lib/supabase.ts';
+
+        // ===== GESTIÓN DE SESIÓN =====
+        window.procesarAcceso = async (modo, rol = 'cliente') => {
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value.trim();
+            const errorMsg = document.getElementById('error-message');
+
+            if (!email || !password) {
+                errorMsg.textContent = 'Por favor completa todos los campos';
+                errorMsg.classList.remove('hidden');
+                return;
+            }
+
+            try {
+                if (modo === 'login') {
+                    const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+                    // DEBUG: mostrar resultado en consola para obtener detalles en caso de fallo
+                    console.log('DEBUG signIn', { email, data, error });
+                    
+                    if (error) {
+                        errorMsg.textContent = error.message || 'Error de autenticación';
+                        errorMsg.classList.remove('hidden');
+                        return;
+                    }
+
+                    if (data.session) {
+                        // Guardar sesión en localStorage (compartida con módulos)
+                        localStorage.setItem('token', data.session.access_token);
+                        localStorage.setItem('user_email', email);
+                        localStorage.setItem('user_role', rol);
+                        localStorage.setItem('session_start', new Date().toISOString());
+
+                        // Mostrar aplicación
+                        iniciarAplicacion(rol);
+                    }
+                }
+            } catch (err) {
+                errorMsg.textContent = 'Error al conectar. Intenta de nuevo.';
+                errorMsg.classList.remove('hidden');
+            }
+        };
+
+        window.mostrarRegistro = () => {
+            alert('Contacta al administrador para solicitar una cuenta.');
+        };
+
+        function iniciarAplicacion(rol) {
+            document.getElementById('login-section').classList.add('hidden');
+            document.getElementById('app-section').classList.remove('hidden');
+            document.getElementById('user-role').textContent = rol === 'admin' ? 'Administrador' : 'Cliente';
+            
+            // Mostrar botón admin solo si es admin
+            if (rol === 'admin') {
+                document.getElementById('admin-btn').classList.remove('hidden');
+                document.getElementById('admin-card').classList.remove('hidden');
+            }
+
+            // Verificar autenticación al cargar módulos
+            verificarAutenticacion();
+            cargarModulo('home');
+        }
+
+        window.cargarModulo = (modulo) => {
+            // Actualizar botones activos
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('active', 'bg-amber-500/20', 'text-amber-400');
+                btn.classList.add('text-gray-300', 'hover:text-white');
+            });
+            document.querySelector(`[data-module="${modulo}"]`).classList.add('active', 'bg-amber-500/20', 'text-amber-400');
+
+            if (modulo === 'home') {
+                document.getElementById('home-view').classList.remove('hidden');
+                document.getElementById('module-view').classList.add('hidden');
+            } else {
+                document.getElementById('home-view').classList.add('hidden');
+                document.getElementById('module-view').classList.remove('hidden');
+
+                const rutas = {
+                    react: '/react/',
+                    vue: '/vue/',
+                    admin: '/angular/'
+                };
+
+                const iframe = document.getElementById('module-frame');
+                iframe.src = rutas[modulo] || '/';
+            }
+
+            // Scroll al inicio
+            window.scrollTo(0, 0);
+        };
+
+        window.cerrarSesion = () => {
+            if (confirm('¿Deseas cerrar sesión?')) {
+                localStorage.removeItem('token');
+                localStorage.removeItem('user_email');
+                localStorage.removeItem('user_role');
+                localStorage.removeItem('session_start');
+                
+                document.getElementById('app-section').classList.add('hidden');
+                document.getElementById('login-section').classList.remove('hidden');
+                document.getElementById('login-form').reset();
+            }
+        };
+
+        function verificarAutenticacion() {
+            const token = localStorage.getItem('token');
+            if (!token) {
+                cerrarSesion();
+            }
+        }
+
+        // Verificar autenticación al cargar
+        if (localStorage.getItem('token')) {
+            iniciarAplicacion(localStorage.getItem('user_role') || 'cliente');
+        }
+
+        // Estilos CSS para navegar
+        const style = document.createElement('style');
+        style.textContent = `
+            .nav-btn.active {
+                @apply bg-amber-500/20 text-amber-400;
+            }
+            .nav-btn {
+                @apply text-gray-300 hover:text-white;
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
 </body>
 </html>

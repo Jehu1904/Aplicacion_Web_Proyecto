@@ -1,12 +1,60 @@
-# Ignorar la carpeta de dependencias pesadas
+# Dependencias
 node_modules/
+package-lock.json
+yarn.lock
 
-# Ignorar la carpeta de producción cuando compiles
+# Build outputs
 dist/
+build/
+out/
 
-# Ignorar archivos de configuración local del editor o del sistema
-.DS_Store
-.vscode/
-*.local
-
+# Archivos de entorno (NUNCA subir credenciales)
 .env
+.env.local
+.env.*.local
+
+# IDE
+.vscode/
+.idea/
+*.code-workspace
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Archivos temporales
+*.tmp
+.cache/
+.parcel-cache/
+
+# Coverage
+coverage/
+
+# Directorios temporales
+temp/
+tmp/
+
+# Archivos de video (backup demo)
+*.mp4
+*.mov
+*.webm
+
+# Build de Angular
+modulo_angular/dist/
+modulo_angular/.angular/
+modulo_angular/e2e/
+
+# Build de Vite
+.vite/
+
+# TypeScript
+*.tsbuildinfo

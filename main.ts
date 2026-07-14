@@ -1,41 +1,20 @@
-import { supabase } from './lib/supabase';
+/**
+ * @file main.ts
+ * @description Punto de entrada de la contenedora Vite vanilla-ts
+ * 
+ * La lógica principal reside en index.html como scripts inline
+ * Este archivo sirve como punto de entrada de Vite
+ */
 
-// Declaración para evitar el error de TypeScript
-declare global {
-    interface Window {
-        procesarAcceso: (modo: 'login' | 'registro', rol?: 'cliente' | 'admin') => Promise<void>;
-    }
+// Estilos globales
+import './style/style.css';
+
+// Verificación de compatibilidad del navegador
+if (!localStorage) {
+    console.error('LocalStorage no está disponible. El sistema requiere localStorage.');
+    alert('Tu navegador no soporta localStorage. Por favor, usa un navegador moderno.');
 }
 
-window.procesarAcceso = async (modo: 'login' | 'registro', rol?: 'cliente' | 'admin') => {
-    const email = (document.getElementById('email') as HTMLInputElement).value;
-    const password = (document.getElementById('password') as HTMLInputElement).value;
+console.log('🎨 INK & IRON - Sistema integrado cargado');
+console.log('📦 Módulos disponibles: React (Catálogo), Vue (Reservas), Angular (Admin)');
 
-    if (modo === 'login') {
-        const { data, error } = await supabase.auth.signInWithPassword({ email, password });
-        
-        if (error) {
-            alert("Error: " + error.message);
-        } else if (data.session) {
-            localStorage.setItem('token', data.session.access_token);
-            localStorage.setItem('user_role', rol || 'cliente');
-            cargarSistema(rol || 'cliente');
-        }
-    }
-};
-
-function cargarSistema(rol: string) {
-    const loginContainer = document.getElementById('login-container');
-    const hero = document.getElementById('hero');
-    
-    if (loginContainer) loginContainer.style.display = 'none';
-    if (hero) hero.style.display = 'none';
-
-    const iframe = document.createElement('iframe');
-    iframe.className = 'iframe-container';
-    
-    // Rutas según rol
-    iframe.src = (rol === 'admin') ? '/modulo_angular/index.html' : '/modulo_vue/index.html';
-    
-    document.body.appendChild(iframe);
-}

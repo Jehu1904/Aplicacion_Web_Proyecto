@@ -1,0 +1,269 @@
+"""
+╔════════════════════════════════════════════════════════════════════════════════╗
+║                   INK & IRON STUDIO - ARQUITECTURA INTEGRADA                   ║
+║                     Sistema Modular Multi-Framework 2026                       ║
+╚════════════════════════════════════════════════════════════════════════════════╝
+
+┌─ CONTENEDORA (Vite vanilla-ts) ──────────────────────────────────────────────┐
+│                                                                                 │
+│   index.html → Login profesional + Menú                                       │
+│       ↓                                                                         │
+│   localStorage: { token, user_email, user_role }                              │
+│       ↓                                                                         │
+│   Selecciona módulo → Carga en iFrame                                         │
+│                                                                                 │
+│   [Inicio] [Catálogo] [Reservas] [Admin] [Logout]                            │
+│                                                                                 │
+└─────────────────────────────────────────────────────────────────────────────────┘
+                    ↓           ↓           ↓
+        ┌───────────┴───────────┼───────────┴───────────┐
+        │                       │                       │
+     ┌──▼─────┐           ┌─────▼──┐           ┌───────▼─┐
+     │ REACT  │           │  VUE   │           │ ANGULAR │
+     │ /react │           │ /vue/  │           │/angular │
+     └────────┘           └────────┘           └─────────┘
+     ├─ Catálogo         ├─ Reservas          ├─ Dashboard
+     ├─ Galería          ├─ Formularios       ├─ Citas
+     ├─ Búsqueda         └─ Estados           ├─ Artistas
+     └─ HashRouter            │               └─ Configuración
+                              │
+                    ┌─────────┴─────────┐
+                    │  Socket.io/RxJS   │
+                    │  Datos en RT       │
+                    └───────────────────┘
+
+═══════════════════════════════════════════════════════════════════════════════════
+
+📦 ESTRUCTURA ARCHIVOS
+
+repo-emprendimiento/
+│
+├── 🌐 CONTENEDORA
+│   ├── index.html                 ← Login + Menú (Tailwind CSS)
+│   ├── main.ts                    ← Entry point
+│   └── vite.config.ts             ← Configuración Vite
+│
+├── 📚 LIBRERÍAS COMPARTIDAS
+│   ├── lib/
+│   │   ├── supabase.ts            ← Cliente Supabase
+│   │   └── auth-utils.ts          ← Helpers autenticación
+│   └── style/
+│       └── style.css              ← Estilos globales
+│
+├── ⚛️ MÓDULO REACT (Catálogo)
+│   ├── index.html
+│   ├── vite.config.ts             → base: '/react/'
+│   ├── src/
+│   │   ├── main.tsx               ← Verifica token localStorage
+│   │   ├── App.tsx                ← HashRouter ✓
+│   │   ├── hooks/
+│   │   │   └── useAuth.ts         ← Hook de autenticación
+│   │   ├── services/
+│   │   │   └── api.ts             ← HTTP con token
+│   │   ├── components/
+│   │   │   ├── TattooCard.tsx
+│   │   │   ├── SearchBar.tsx
+│   │   │   ├── FilterGroup.tsx
+│   │   │   └── TattooModal.tsx
+│   │   ├── styles/
+│   │   └── data/
+│   │       └── citasMock.ts
+│   └── package.json
+│
+├── 💚 MÓDULO VUE (Reservas)
+│   ├── index.html
+│   ├── vite.config.ts             → base: '/vue/'
+│   ├── src/
+│   │   ├── main.ts                ← Verifica token localStorage
+│   │   ├── App.vue
+│   │   ├── router/
+│   │   │   └── index.ts           ← createWebHashHistory('/vue/') ✓
+│   │   ├── composables/
+│   │   │   └── useAuth.ts         ← Composable de autenticación
+│   │   ├── services/
+│   │   │   └── api.ts             ← HTTP con token
+│   │   ├── views/
+│   │   │   ├── DashboardView.vue
+│   │   │   └── DetalleCitaView.vue
+│   │   ├── styles/
+│   │   └── models/
+│   │       └── mockData.ts
+│   └── package.json
+│
+├── 🅰️ MÓDULO ANGULAR (Admin)
+│   ├── src/
+│   │   ├── index.html             → base: '/angular/' ✓
+│   │   ├── main.ts
+│   │   ├── app/
+│   │   │   ├── app.config.ts      ← withHashLocation() ✓
+│   │   │   ├── app.routes.ts
+│   │   │   ├── app.ts
+│   │   │   ├── acceso.guard.ts    ← Guard de autenticación
+│   │   │   ├── services/
+│   │   │   │   ├── auth.service.ts ← RxJS + localStorage
+│   │   │   │   ├── api.service.ts   ← HttpClient con token
+│   │   │   │   └── citas.ts
+│   │   │   ├── models/
+│   │   │   │   └── cita.model.ts
+│   │   │   └── views/
+│   │   │       ├── acceso/
+│   │   │       └── admin/
+│   │   └── styles.css
+│   ├── angular.json
+│   └── package.json
+│
+├── 🔧 SCRIPTS & AUTOMATIZACIÓN
+│   ├── scripts/
+│   │   ├── copy-dist.js           ← Organiza módulos en dist/
+│   │   └── verify-setup.js        ← Verifica configuración
+│   └── package.json               ← Scripts npm mejorados
+│
+├── 📖 DOCUMENTACIÓN
+│   ├── README.md                  ← Guía completa
+│   ├── QUICK_START.md             ← Referencia rápida
+│   ├── DEPLOY.md                  ← 5 opciones de deploy
+│   ├── DEMO_DAY.md                ← Checklist presentación
+│   ├── RESUMEN.md                 ← Este resumen detallado
+│   └── .env.example               ← Variables de entorno
+│
+└── 📦 SALIDA FINAL
+    dist/
+    ├── index.html                 ← Contenedora compilada
+    ├── assets/
+    ├── react/                     ← Build de React
+    │   ├── index.html
+    │   ├── assets/
+    │   └── ...
+    ├── vue/                       ← Build de Vue
+    │   ├── index.html
+    │   ├── assets/
+    │   └── ...
+    └── angular/                   ← Build de Angular
+        ├── index.html
+        ├── assets/
+        └── ...
+
+═══════════════════════════════════════════════════════════════════════════════════
+
+🔐 FLUJO DE AUTENTICACIÓN
+
+1. Usuario → Contenedora (login)
+   └─ Ingresa email + password
+      └─ Supabase valida
+         └─ Devuelve JWT token
+
+2. Contenedora guarda en localStorage:
+   ├─ token
+   ├─ user_email
+   ├─ user_role ('cliente' o 'admin')
+   └─ session_start
+
+3. Usuario elige módulo → Se carga en iFrame
+   └─ Módulo lee localStorage
+      └─ Token disponible ✓
+         └─ Envía en Authorization header
+            └─ Supabase valida
+               └─ Acceso permitido
+
+4. Si token expira:
+   └─ Supabase devuelve 401
+      └─ Módulo limpia localStorage
+         └─ Redirige a login
+
+═══════════════════════════════════════════════════════════════════════════════════
+
+🚀 COMANDOS ESSENCIALES
+
+# Verificación
+npm run verify              → ✅ Verifica setup
+
+# Desarrollo
+npm run dev                 → Contenedora en http://localhost:5173
+
+# Build
+npm run build              → Compila todo a dist/
+
+# Deploy
+npm run preview            → Simula producción localmente
+
+═══════════════════════════════════════════════════════════════════════════════════
+
+✅ CARACTERÍSTICAS IMPLEMENTADAS
+
+SEGÚN PDF DEL CURSO:
+
+[✓] Paso 1: Contenedora Vite vanilla-ts
+[✓] Paso 2: Módulos en subcarpetas (dist/react/, dist/vue/, dist/angular/)
+[✓] Paso 3: Hash routing en todos los frameworks
+[✓] Paso 4: Un solo login para toda la app (localStorage)
+[✓] Paso 5: iFrame para mostrar módulos
+[✓] Paso 6: Un solo Supabase para equipo
+
+INTEGRACIONES:
+
+[✓] React + HashRouter + Hash routing
+[✓] Vue + createWebHashHistory('/vue/')
+[✓] Angular + withHashLocation()
+[✓] Autenticación compartida localStorage
+[✓] API con token en Authorization header
+[✓] RLS en Supabase para seguridad
+[✓] Responsive design (Tailwind + CSS)
+[✓] Build modular y escalable
+
+═══════════════════════════════════════════════════════════════════════════════════
+
+📊 RESPONSABILIDADES POR MÓDULO
+
+┌─────────────┬──────────────────┬─────────────────────┐
+│   REACT     │       VUE        │      ANGULAR        │
+├─────────────┼──────────────────┼─────────────────────┤
+│ Catálogo    │ Reservas         │ Admin Dashboard     │
+│ Galería     │ Formularios      │ Gestión de citas    │
+│ Búsqueda    │ Listado          │ Gestión de artistas │
+│ Filtros     │ Detalles         │ Configuración       │
+│ Cards       │ Validación       │ Reportes            │
+└─────────────┴──────────────────┴─────────────────────┘
+
+═══════════════════════════════════════════════════════════════════════════════════
+
+🌍 RUTAS EN PRODUCCIÓN
+
+  https://tu-app.vercel.app
+          ├── /                 → Contenedora + Login
+          ├── /react/#/         → Catálogo
+          ├── /vue/#/           → Reservas
+          └── /angular/#/       → Admin
+
+═══════════════════════════════════════════════════════════════════════════════════
+
+📅 TIMELINE RECOMENDADO
+
+AHORA:
+  [ ] npm run verify                 (5 min)
+  [ ] npm run dev                    (HMR development)
+
+HOY/MAÑANA:
+  [ ] Cada integrante mejora su módulo
+  [ ] Integración pruebas
+  [ ] Revisión de datos Supabase
+
+PRÓXIMA SEMANA:
+  [ ] npm run build
+  [ ] npm run preview
+  [ ] Prueba desde otro dispositivo
+  [ ] Deploy a Netlify/Vercel
+
+DÍA DE LA DEMO:
+  [ ] Revisar DEMO_DAY.md
+  [ ] Ensayo completo con cronómetro
+  [ ] Video de backup pregrabado
+  [ ] Presentación en vivo
+
+═══════════════════════════════════════════════════════════════════════════════════
+
+✨ ¡PROYECTO COMPLETAMENTE INTEGRADO Y PROFESIONAL!
+
+Siguiente paso: npm run verify && npm run dev
+
+═══════════════════════════════════════════════════════════════════════════════════
+"""

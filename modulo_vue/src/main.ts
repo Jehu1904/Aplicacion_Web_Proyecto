@@ -1,17 +1,24 @@
 /**
  * @file main.ts
- * @description Punto de entrada exclusivo para el módulo de Vue 3.
- * Inicializa la aplicación y conecta el enrutador dinámico.
+ * @description Punto de entrada para el módulo Vue 3
+ * Verifica autenticación desde localStorage (compartida con contenedora)
  */
 import { createApp, App as VueApp } from 'vue';
 import App from './App.vue';
 import router from './router';
 
-// Instanciación del framework en su entorno aislado
-const app: VueApp = createApp(App);
+// Verificar autenticación antes de cargar
+const token = localStorage.getItem('token');
+if (!token) {
+  // Si no hay token, redirigir a la contenedora
+  window.location.href = '/';
+} else {
+  // Instanciación del framework
+  const app: VueApp = createApp(App);
 
-// Acoplamos el sistema de rutas dinámicas de Vue
-app.use(router);
+  // Acoplar el sistema de rutas
+  app.use(router);
 
-// Montamos la aplicación sobre el contenedor del HTML local
-app.mount('#app');
+  // Montar la aplicación
+  app.mount('#app');
+}

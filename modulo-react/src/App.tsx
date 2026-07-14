@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { BrowserRouter, Routes, Route, Link, useNavigate } from 'react-router-dom';
+import { HashRouter, Routes, Route, Link, useNavigate } from 'react-router-dom';
 import { CITAS_MOCK, type CitaTatuaje } from './data/citasMock'; 
 import SearchBar from './components/SearchBar';
 import FilterGroup from './components/FilterGroup';
@@ -104,7 +104,7 @@ function FormularioCita() {
 // ENRUTADOR PRINCIPAL 
 export default function App() {
   return (
-    <BrowserRouter>
+    <HashRouter>
       <EstadoGlobalContext.Provider value={{ nombreEstudio: "Manta Tattoo Studio" }}>
         <Navbar />
         <Routes>
@@ -113,6 +113,6 @@ export default function App() {
           <Route path="/cita/:id" element={<TattooModal />} />
         </Routes>
       </EstadoGlobalContext.Provider>
-    </BrowserRouter>
+    </HashRouter>
   );
 }

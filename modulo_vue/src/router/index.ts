@@ -1,8 +1,9 @@
 /**
  * @file index.ts
  * @description Enrutador centralizado para la navegación SPA de Vue.
+ * Usa Hash History para compatibilidad con subcarpetas
  */
-import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router';
+import { createRouter, createWebHashHistory, RouteRecordRaw } from 'vue-router';
 import DashboardView from '../views/DashboardView.vue';
 import DetalleCitaView from '../views/DetalleCitaView.vue';
 
@@ -21,7 +22,7 @@ const routes: Array<RouteRecordRaw> = [
 ];
 
 const router = createRouter({
-    history: createWebHistory(),
+    history: createWebHashHistory('/vue/'),
     routes
 });
 

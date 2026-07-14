@@ -1,10 +1,17 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
-import './styles/index.css' // Único import correcto apuntando a la subcarpeta styles
+import './styles/index.css'
 import App from './App.tsx'
 
-createRoot(document.getElementById('root')!).render(
-  <StrictMode>
-    <App />
-  </StrictMode>,
-)
+// Verificar autenticación antes de cargar
+const token = localStorage.getItem('token');
+if (!token) {
+  // Si no hay token, redirigir a la contenedora
+  window.location.href = '/';
+} else {
+  createRoot(document.getElementById('root')!).render(
+    <StrictMode>
+      <App />
+    </StrictMode>,
+  )
+}
