@@ -15,6 +15,23 @@ export default defineConfig({
   server: {
     port: 5173,
     open: true,
-    strictPort: true
+    strictPort: true,
+    proxy: {
+      '/react': {
+        target: 'http://localhost:5174',
+        changeOrigin: true,
+        ws: true
+      },
+      '/vue': {
+        target: 'http://localhost:5176',
+        changeOrigin: true,
+        ws: true
+      },
+      '/angular': {
+        target: 'http://localhost:4200',
+        changeOrigin: true,
+        ws: true
+      }
+    }
   }
 })

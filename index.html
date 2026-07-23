@@ -166,6 +166,83 @@
     <script type="module">
         import { supabase } from '/lib/supabase.ts';
 
+        const enDesarrolloLocal = ['localhost', '127.0.0.1'].includes(window.location.hostname);
+        const rutas = enDesarrolloLocal
+            ? {
+                home: null,
+                react: 'http://localhost:5174/react/',
+                vue: 'http://localhost:5176/vue/',
+                admin: 'http://localhost:4200/'
+            }
+            : {
+                home: null,
+                react: '/react/',
+                vue: '/vue/',
+                admin: '/angular/'
+            };
+
+        const modulosPermitidos = new Set(Object.keys(rutas));
+        let rolActual = 'cliente';
+
+        function obtenerModuloDesdeHash() {
+            const valor = window.location.hash.replace(/^#\/?/, '').trim().toLowerCase();
+            if (modulosPermitidos.has(valor)) return valor;
+            return 'home';
+        }
+
+        function setHashModulo(modulo) {
+            const destino = `#/${modulo}`;
+            if (window.location.hash !== destino) {
+                window.location.hash = destino;
+                return;
+            }
+            renderModulo(modulo);
+        }
+
+        function esModuloPermitido(modulo) {
+            if (modulo === 'admin' && rolActual !== 'admin') return false;
+            return modulosPermitidos.has(modulo);
+        }
+
+        function renderModulo(modulo) {
+            const moduloSeguro = esModuloPermitido(modulo) ? modulo : 'home';
+
+            if (moduloSeguro !== modulo) {
+                history.replaceState(null, '', '#/home');
+            }
+
+            // Actualizar botones activos
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('active', 'bg-amber-500/20', 'text-amber-400');
+                btn.classList.add('text-gray-300', 'hover:text-white');
+            });
+
+            const botonActivo = document.querySelector(`[data-module="${moduloSeguro}"]`);
+            if (botonActivo) {
+                botonActivo.classList.add('active', 'bg-amber-500/20', 'text-amber-400');
+            }
+
+            if (moduloSeguro === 'home') {
+                document.getElementById('home-view').classList.remove('hidden');
+                document.getElementById('module-view').classList.add('hidden');
+            } else {
+                document.getElementById('home-view').classList.add('hidden');
+                document.getElementById('module-view').classList.remove('hidden');
+
+                const iframe = document.getElementById('module-frame');
+                const destinoBase = rutas[moduloSeguro] || '/';
+                const token = localStorage.getItem('token') || '';
+                const email = localStorage.getItem('user_email') || '';
+                const role = localStorage.getItem('user_role') || 'cliente';
+                const started = localStorage.getItem('session_start') || new Date().toISOString();
+                const query = new URLSearchParams({ token, email, role, started }).toString();
+                iframe.src = `${destinoBase}${destinoBase.includes('?') ? '&' : '?'}${query}`;
+            }
+
+            // Scroll al inicio
+            window.scrollTo(0, 0);
+        }
+
         // ===== GESTIÓN DE SESIÓN =====
         window.procesarAcceso = async (modo, rol = 'cliente') => {
             const email = document.getElementById('email').value.trim();
@@ -191,14 +268,33 @@
                     }
 
                     if (data.session) {
+                        const emailAutenticado = (data.user?.email || email).toLowerCase();
+                        const rolSolicitado = rol === 'admin' ? 'admin' : 'cliente';
+                        const rolPorMetadata = (data.user?.user_metadata?.role || '').toString().toLowerCase();
+                        const adminsPermitidos = new Set(['admin@inkiorn.com']);
+                        const esAdminAutorizado = rolPorMetadata === 'admin' || adminsPermitidos.has(emailAutenticado);
+                        const rolFinal = (rolSolicitado === 'admin' && esAdminAutorizado) ? 'admin' : 'cliente';
+
+                        if (rolSolicitado === 'admin' && !esAdminAutorizado) {
+                            errorMsg.textContent = 'Tu cuenta no tiene permisos de administrador';
+                            errorMsg.classList.remove('hidden');
+                            return;
+                        }
+
                         // Guardar sesión en localStorage (compartida con módulos)
                         localStorage.setItem('token', data.session.access_token);
-                        localStorage.setItem('user_email', email);
-                        localStorage.setItem('user_role', rol);
+                        localStorage.setItem('user_email', emailAutenticado);
+                        localStorage.setItem('user_role', rolFinal);
                         localStorage.setItem('session_start', new Date().toISOString());
 
+                        localStorage.setItem('mtc_session', JSON.stringify({
+                            user: emailAutenticado,
+                            role: rolFinal,
+                            authenticated: true
+                        }));
+
                         // Mostrar aplicación
-                        iniciarAplicacion(rol);
+                        iniciarAplicacion(rolFinal);
                     }
                 }
             } catch (err) {
@@ -212,48 +308,33 @@
         };
 
         function iniciarAplicacion(rol) {
+            rolActual = rol === 'admin' ? 'admin' : 'cliente';
             document.getElementById('login-section').classList.add('hidden');
             document.getElementById('app-section').classList.remove('hidden');
-            document.getElementById('user-role').textContent = rol === 'admin' ? 'Administrador' : 'Cliente';
+            document.getElementById('user-role').textContent = rolActual === 'admin' ? 'Administrador' : 'Cliente';
             
             // Mostrar botón admin solo si es admin
-            if (rol === 'admin') {
+            if (rolActual === 'admin') {
                 document.getElementById('admin-btn').classList.remove('hidden');
                 document.getElementById('admin-card').classList.remove('hidden');
+            } else {
+                document.getElementById('admin-btn').classList.add('hidden');
+                document.getElementById('admin-card').classList.add('hidden');
             }
 
             // Verificar autenticación al cargar módulos
             verificarAutenticacion();
-            cargarModulo('home');
+
+            if (!window.location.hash) {
+                history.replaceState(null, '', '#/home');
+            }
+
+            renderModulo(obtenerModuloDesdeHash());
         }
 
         window.cargarModulo = (modulo) => {
-            // Actualizar botones activos
-            document.querySelectorAll('.nav-btn').forEach(btn => {
-                btn.classList.remove('active', 'bg-amber-500/20', 'text-amber-400');
-                btn.classList.add('text-gray-300', 'hover:text-white');
-            });
-            document.querySelector(`[data-module="${modulo}"]`).classList.add('active', 'bg-amber-500/20', 'text-amber-400');
-
-            if (modulo === 'home') {
-                document.getElementById('home-view').classList.remove('hidden');
-                document.getElementById('module-view').classList.add('hidden');
-            } else {
-                document.getElementById('home-view').classList.add('hidden');
-                document.getElementById('module-view').classList.remove('hidden');
-
-                const rutas = {
-                    react: '/react/',
-                    vue: '/vue/',
-                    admin: '/angular/'
-                };
-
-                const iframe = document.getElementById('module-frame');
-                iframe.src = rutas[modulo] || '/';
-            }
-
-            // Scroll al inicio
-            window.scrollTo(0, 0);
+            const moduloSeguro = modulosPermitidos.has(modulo) ? modulo : 'home';
+            setHashModulo(moduloSeguro);
         };
 
         window.cerrarSesion = () => {
@@ -262,10 +343,15 @@
                 localStorage.removeItem('user_email');
                 localStorage.removeItem('user_role');
                 localStorage.removeItem('session_start');
+                localStorage.removeItem('mtc_session');
                 
+                document.getElementById('module-frame').src = 'about:blank';
                 document.getElementById('app-section').classList.add('hidden');
                 document.getElementById('login-section').classList.remove('hidden');
                 document.getElementById('login-form').reset();
+
+                rolActual = 'cliente';
+                history.replaceState(null, '', '#/home');
             }
         };
 
@@ -280,6 +366,11 @@
         if (localStorage.getItem('token')) {
             iniciarAplicacion(localStorage.getItem('user_role') || 'cliente');
         }
+
+        window.addEventListener('hashchange', () => {
+            if (!localStorage.getItem('token')) return;
+            renderModulo(obtenerModuloDesdeHash());
+        });
 
         // Estilos CSS para navegar
         const style = document.createElement('style');

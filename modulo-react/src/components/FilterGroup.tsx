@@ -13,7 +13,7 @@ export default function FilterGroup({ setFiltro }: FilterGroupProps) {
         <button 
           key={estilo}
           onClick={() => setFiltro(estilo === 'Todos' ? '' : estilo)}
-          style={{ padding: '5px 10px', cursor: 'pointer', background: '#f4f4f4', border: '1px solid #ccc', borderRadius: '4px' }}
+          style={{ padding: '5px 10px', cursor: 'pointer', background: '#89c7f0', border: '1px solid #8cf0e2', borderRadius: '4px' }}
         >
           {estilo}
         </button>

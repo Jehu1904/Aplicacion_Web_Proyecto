@@ -14,14 +14,40 @@ export class AccesoGuard implements CanActivate {
   canActivate(): boolean {
     const token = localStorage.getItem('token');
     const role = localStorage.getItem('user_role');
+    const localAuth = localStorage.getItem('moduloAngularAuth') === 'true';
+    const localRole = localStorage.getItem('moduloAngularRole');
+    const sharedRaw = localStorage.getItem('mtc_session');
 
-    // Verificar que sea admin
-    if (token && role === 'admin') {
+    let sharedSessionIsAdmin = false;
+    if (sharedRaw) {
+      try {
+        const parsed = JSON.parse(sharedRaw) as {
+          role?: string;
+          authenticated?: boolean;
+        };
+        sharedSessionIsAdmin =
+          parsed.authenticated === true && (parsed.role ?? '').toLowerCase() === 'admin';
+      } catch {
+        sharedSessionIsAdmin = false;
+      }
+    }
+
+    // Aceptar sesión admin desde contenedora o desde el propio login del módulo.
+    const integratedAdmin = !!token && role === 'admin';
+    const standaloneAdmin = localAuth && localRole === 'admin';
+
+    if (integratedAdmin || standaloneAdmin || sharedSessionIsAdmin) {
       return true;
     }
 
-    // Si no es admin o no hay token, ir a login o contenedora
-    window.location.href = '/';
+    // En modo integrado (contenedora), volver al launcher principal.
+    if (window.location.pathname.startsWith('/angular')) {
+      window.location.href = '/';
+      return false;
+    }
+
+    // En modo standalone de Angular, mostrar pantalla de acceso del módulo.
+    this.router.navigateByUrl('/acceso');
     return false;
   }
 }
