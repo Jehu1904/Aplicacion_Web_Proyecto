@@ -25,12 +25,12 @@
 
             <!-- Formulario de Login -->
             <form id="login-form" class="bg-[#1a1a1a] border border-white/10 rounded-lg p-8 backdrop-blur-sm space-y-5">
-                
+
                 <div>
                     <label for="email" class="block text-sm font-medium text-gray-300 mb-2">Correo Electrónico</label>
-                    <input 
-                        id="email" 
-                        type="email" 
+                    <input
+                        id="email"
+                        type="email"
                         required
                         placeholder="tu@correo.com"
                         class="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400 transition"
@@ -39,9 +39,9 @@
 
                 <div>
                     <label for="password" class="block text-sm font-medium text-gray-300 mb-2">Contraseña</label>
-                    <input 
-                        id="password" 
-                        type="password" 
+                    <input
+                        id="password"
+                        type="password"
                         required
                         placeholder="••••••••"
                         class="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400 transition"
@@ -49,17 +49,18 @@
                 </div>
 
                 <div id="error-message" class="hidden bg-red-500/10 border border-red-500/20 rounded-lg p-3 text-red-400 text-sm"></div>
+                <div id="success-message" class="hidden bg-emerald-500/10 border border-emerald-500/20 rounded-lg p-3 text-emerald-400 text-sm"></div>
 
                 <!-- Botones de Login -->
                 <div class="grid grid-cols-2 gap-3 pt-4">
-                    <button 
+                    <button
                         type="button"
                         onclick="procesarAcceso('login', 'cliente')"
                         class="bg-amber-500 hover:bg-amber-600 text-black font-semibold py-3 rounded-lg transition duration-200 text-sm tracking-wide"
                     >
                         Entrar como Cliente
                     </button>
-                    <button 
+                    <button
                         type="button"
                         onclick="procesarAcceso('login', 'admin')"
                         class="bg-white/10 hover:bg-white/20 border border-white/20 text-white font-semibold py-3 rounded-lg transition duration-200 text-sm tracking-wide"
@@ -77,9 +78,70 @@
                 <p class="text-center text-sm text-gray-400">
                     ¿No tienes cuenta?
                     <button type="button" onclick="mostrarRegistro()" class="text-amber-400 hover:text-amber-300 font-medium transition">
-                        Solicita acceso aquí
+                        Crear cuenta
                     </button>
                 </p>
+            </form>
+
+            <!-- Formulario de Registro -->
+            <form id="register-form" class="hidden bg-[#1a1a1a] border border-white/10 rounded-lg p-8 backdrop-blur-sm space-y-5">
+                <div class="text-center">
+                    <h2 class="text-xl font-semibold text-white">Crear cuenta de cliente</h2>
+                    <p class="text-sm text-gray-400 mt-1">Completa tus datos para crear tus credenciales</p>
+                </div>
+
+                <div>
+                    <label for="register-email" class="block text-sm font-medium text-gray-300 mb-2">Correo electrónico</label>
+                    <input
+                        id="register-email"
+                        type="email"
+                        required
+                        placeholder="tu@correo.com"
+                        class="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400 transition"
+                    >
+                </div>
+
+                <div>
+                    <label for="register-password" class="block text-sm font-medium text-gray-300 mb-2">Contraseña nueva</label>
+                    <input
+                        id="register-password"
+                        type="password"
+                        required
+                        placeholder="Mínimo 6 caracteres"
+                        class="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400 transition"
+                    >
+                </div>
+
+                <div>
+                    <label for="register-confirm-password" class="block text-sm font-medium text-gray-300 mb-2">Confirmar contraseña</label>
+                    <input
+                        id="register-confirm-password"
+                        type="password"
+                        required
+                        placeholder="Repite tu contraseña"
+                        class="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400 transition"
+                    >
+                </div>
+
+                <div id="register-error-message" class="hidden bg-red-500/10 border border-red-500/20 rounded-lg p-3 text-red-400 text-sm"></div>
+                <div id="register-success-message" class="hidden bg-emerald-500/10 border border-emerald-500/20 rounded-lg p-3 text-emerald-400 text-sm"></div>
+
+                <div class="grid grid-cols-2 gap-3 pt-2">
+                    <button
+                        type="button"
+                        onclick="crearCuentaCliente()"
+                        class="bg-emerald-500 hover:bg-emerald-600 text-black font-semibold py-3 rounded-lg transition duration-200 text-sm tracking-wide"
+                    >
+                        Crear cuenta
+                    </button>
+                    <button
+                        type="button"
+                        onclick="ocultarRegistro()"
+                        class="bg-white/10 hover:bg-white/20 border border-white/20 text-white font-semibold py-3 rounded-lg transition duration-200 text-sm tracking-wide"
+                    >
+                        Volver
+                    </button>
+                </div>
             </form>
 
             <!-- Footer -->
@@ -144,15 +206,51 @@
                     </div>
 
                     <!-- Información del estudio -->
-                    <div class="mt-12 bg-white/5 border border-white/10 rounded-lg p-8">
-                        <h2 class="font-['Playfair_Display'] text-3xl font-bold mb-4">INK & IRON Studio</h2>
-                        <p class="text-gray-300 mb-4">Donde el arte se convierte en piel. Nuestro equipo de artistas profesionales está listo para traer tus ideas a la vida con precisión y creatividad.</p>
-                        <div class="grid md:grid-cols-3 gap-4 mt-6 text-sm text-gray-400">
-                            <div>✓ Artistas Certificados</div>
-                            <div>✓ Equipos Esterilizados</div>
-                            <div>✓ Garantía de Calidad</div>
+                    <section class="mt-12 relative overflow-hidden rounded-xl border border-white/10 bg-gradient-to-br from-white/10 via-white/5 to-transparent">
+                        <div class="absolute inset-0 opacity-20 bg-cover bg-center" style="background-image: url('https://images.unsplash.com/photo-1542884748-2b87b36c6b90?auto=format&fit=crop&w=1400&q=80');"></div>
+                        <div class="absolute inset-0 bg-gradient-to-r from-[#0f0f0f]/95 via-[#111]/85 to-[#111]/70"></div>
+
+                        <div class="relative z-10 p-8 md:p-10">
+                            <div class="grid md:grid-cols-2 gap-8 items-start">
+                                <div>
+                                    <p class="text-amber-300 uppercase tracking-[0.2em] text-xs font-semibold mb-3">Experiencia premium</p>
+                                    <h2 class="font-['Playfair_Display'] text-3xl md:text-4xl font-bold mb-4 leading-tight">INK & IRON Studio</h2>
+                                    <p class="text-gray-200 mb-6 max-w-xl leading-relaxed">Donde el arte se convierte en piel. Nuestro equipo de artistas profesionales está listo para traer tus ideas a la vida con precisión, creatividad y estándares de higiene de primer nivel.</p>
+
+                                    <div class="grid sm:grid-cols-2 gap-3 text-sm">
+                                        <div class="bg-black/30 border border-white/10 rounded-lg px-4 py-3 text-gray-200">✓ Artistas certificados y especializados</div>
+                                        <div class="bg-black/30 border border-white/10 rounded-lg px-4 py-3 text-gray-200">✓ Equipos esterilizados por protocolo</div>
+                                        <div class="bg-black/30 border border-white/10 rounded-lg px-4 py-3 text-gray-200">✓ Diseño personalizado por sesión</div>
+                                        <div class="bg-black/30 border border-white/10 rounded-lg px-4 py-3 text-gray-200">✓ Garantía de calidad y seguimiento</div>
+                                    </div>
+                                </div>
+
+                                <div class="space-y-4">
+                                    <div class="bg-black/35 border border-white/10 rounded-lg p-5">
+                                        <p class="text-xs uppercase tracking-widest text-amber-300 mb-2">Próxima jornada</p>
+                                        <h3 class="text-xl font-bold mb-2">Flash Day Weekend</h3>
+                                        <p class="text-sm text-gray-300">Diseños seleccionados con cupos limitados. Reserva con anticipación para asegurar tu horario.</p>
+                                    </div>
+
+                                    <div class="grid grid-cols-2 gap-3">
+                                        <div class="bg-black/35 border border-white/10 rounded-lg p-4">
+                                            <p class="text-xs uppercase tracking-widest text-gray-400">Satisfacción</p>
+                                            <p class="text-2xl font-extrabold text-white mt-1">4.9/5</p>
+                                        </div>
+                                        <div class="bg-black/35 border border-white/10 rounded-lg p-4">
+                                            <p class="text-xs uppercase tracking-widest text-gray-400">Trabajos</p>
+                                            <p class="text-2xl font-extrabold text-white mt-1">+1200</p>
+                                        </div>
+                                    </div>
+
+                                    <div class="flex flex-wrap gap-3 pt-1">
+                                        <button onclick="cargarModulo('vue')" class="bg-amber-500 hover:bg-amber-600 text-black font-semibold px-5 py-2.5 rounded-lg transition text-sm">Reservar cita</button>
+                                        <button onclick="cargarModulo('react')" class="bg-white/10 hover:bg-white/20 border border-white/20 text-white font-semibold px-5 py-2.5 rounded-lg transition text-sm">Ver catálogo</button>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                    </div>
+                    </section>
                 </div>
             </div>
 
@@ -244,14 +342,57 @@
         }
 
         // ===== GESTIÓN DE SESIÓN =====
+        function esCorreoValido(correo) {
+            return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(correo);
+        }
+
+        function mostrarMensajeLogin(tipo, mensaje) {
+            const errorMsg = document.getElementById('error-message');
+            const successMsg = document.getElementById('success-message');
+
+            errorMsg.classList.add('hidden');
+            successMsg.classList.add('hidden');
+
+            if (tipo === 'error') {
+                errorMsg.textContent = mensaje;
+                errorMsg.classList.remove('hidden');
+                return;
+            }
+
+            successMsg.textContent = mensaje;
+            successMsg.classList.remove('hidden');
+        }
+
+        function mostrarMensajeRegistro(tipo, mensaje) {
+            const errorMsg = document.getElementById('register-error-message');
+            const successMsg = document.getElementById('register-success-message');
+
+            errorMsg.classList.add('hidden');
+            successMsg.classList.add('hidden');
+
+            if (tipo === 'error') {
+                errorMsg.textContent = mensaje;
+                errorMsg.classList.remove('hidden');
+                return;
+            }
+
+            successMsg.textContent = mensaje;
+            successMsg.classList.remove('hidden');
+        }
+
         window.procesarAcceso = async (modo, rol = 'cliente') => {
             const email = document.getElementById('email').value.trim();
             const password = document.getElementById('password').value.trim();
-            const errorMsg = document.getElementById('error-message');
+            document.getElementById('error-message').classList.add('hidden');
+            document.getElementById('success-message').classList.add('hidden');
 
             if (!email || !password) {
-                errorMsg.textContent = 'Por favor completa todos los campos';
-                errorMsg.classList.remove('hidden');
+                mostrarMensajeLogin('error', 'Por favor completa todos los campos');
+                return;
+            }
+
+            if (!esCorreoValido(email)) {
+                mostrarMensajeLogin('error', 'Ingresa un correo válido (ejemplo: nombre@dominio.com)');
                 return;
             }
 
@@ -262,8 +403,7 @@
                     console.log('DEBUG signIn', { email, data, error });
                     
                     if (error) {
-                        errorMsg.textContent = error.message || 'Error de autenticación';
-                        errorMsg.classList.remove('hidden');
+                        mostrarMensajeLogin('error', error.message || 'Error de autenticación');
                         return;
                     }
 
@@ -275,9 +415,13 @@
                         const esAdminAutorizado = rolPorMetadata === 'admin' || adminsPermitidos.has(emailAutenticado);
                         const rolFinal = (rolSolicitado === 'admin' && esAdminAutorizado) ? 'admin' : 'cliente';
 
+                        if (rolSolicitado === 'cliente' && esAdminAutorizado) {
+                            mostrarMensajeLogin('error', 'Esta cuenta es de administrador. Ingresa con el botón "Administrador".');
+                            return;
+                        }
+
                         if (rolSolicitado === 'admin' && !esAdminAutorizado) {
-                            errorMsg.textContent = 'Tu cuenta no tiene permisos de administrador';
-                            errorMsg.classList.remove('hidden');
+                            mostrarMensajeLogin('error', 'Tu cuenta no tiene permisos de administrador');
                             return;
                         }
 
@@ -298,13 +442,91 @@
                     }
                 }
             } catch (err) {
-                errorMsg.textContent = 'Error al conectar. Intenta de nuevo.';
-                errorMsg.classList.remove('hidden');
+                mostrarMensajeLogin('error', 'Error al conectar. Intenta de nuevo.');
             }
         };
 
         window.mostrarRegistro = () => {
-            alert('Contacta al administrador para solicitar una cuenta.');
+            document.getElementById('login-form').classList.add('hidden');
+            document.getElementById('register-form').classList.remove('hidden');
+            document.getElementById('error-message').classList.add('hidden');
+            document.getElementById('success-message').classList.add('hidden');
+            document.getElementById('register-error-message').classList.add('hidden');
+            document.getElementById('register-success-message').classList.add('hidden');
+        };
+
+        window.ocultarRegistro = () => {
+            const registerForm = document.getElementById('register-form');
+            const loginForm = document.getElementById('login-form');
+            const registerEmail = document.getElementById('register-email');
+            const pass = document.getElementById('register-password');
+            const passConfirm = document.getElementById('register-confirm-password');
+            registerForm.classList.add('hidden');
+            loginForm.classList.remove('hidden');
+            registerEmail.value = '';
+            pass.value = '';
+            passConfirm.value = '';
+            document.getElementById('register-error-message').classList.add('hidden');
+            document.getElementById('register-success-message').classList.add('hidden');
+        };
+
+        window.crearCuentaCliente = async () => {
+            const email = document.getElementById('register-email').value.trim().toLowerCase();
+            const password = document.getElementById('register-password').value.trim();
+            const confirmPassword = document.getElementById('register-confirm-password').value.trim();
+            document.getElementById('register-error-message').classList.add('hidden');
+            document.getElementById('register-success-message').classList.add('hidden');
+
+            if (!email) {
+                mostrarMensajeRegistro('error', 'Completa tu correo electrónico');
+                return;
+            }
+
+            if (!esCorreoValido(email)) {
+                mostrarMensajeRegistro('error', 'Ingresa un correo válido (debe incluir @ y dominio)');
+                return;
+            }
+
+            if (!password || !confirmPassword) {
+                mostrarMensajeRegistro('error', 'Completa la contraseña y su confirmación');
+                return;
+            }
+
+            if (password.length < 6) {
+                mostrarMensajeRegistro('error', 'La contraseña debe tener al menos 6 caracteres');
+                return;
+            }
+
+            if (password !== confirmPassword) {
+                mostrarMensajeRegistro('error', 'Las contraseñas no coinciden');
+                return;
+            }
+
+            try {
+                const { data, error } = await supabase.auth.signUp({
+                    email,
+                    password,
+                    options: {
+                        data: { role: 'cliente' }
+                    }
+                });
+
+                if (error) {
+                    mostrarMensajeRegistro('error', error.message || 'No se pudo crear la cuenta');
+                    return;
+                }
+
+                if (data.session) {
+                    await supabase.auth.signOut();
+                }
+
+                ocultarRegistro();
+                document.getElementById('email').value = email;
+                document.getElementById('password').value = '';
+                mostrarMensajeLogin('success', 'Cuenta creada correctamente. Ahora inicia sesión como cliente.');
+            } catch (err) {
+                mostrarMensajeRegistro('error', 'Error al crear la cuenta. Intenta de nuevo.');
+            }
         };
 
         function iniciarAplicacion(rol) {
@@ -349,6 +571,8 @@
                 document.getElementById('app-section').classList.add('hidden');
                 document.getElementById('login-section').classList.remove('hidden');
                 document.getElementById('login-form').reset();
+                document.getElementById('register-form').classList.add('hidden');
+                document.getElementById('login-form').classList.remove('hidden');
 
                 rolActual = 'cliente';
                 history.replaceState(null, '', '#/home');

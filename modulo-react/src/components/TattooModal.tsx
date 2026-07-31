@@ -1,10 +1,14 @@
 import { useParams, useNavigate } from 'react-router-dom';
-import { CITAS_MOCK } from '../data/citasMock';
+import type { CitaTatuaje } from '../data/citasMock';
 
-export default function TattooModal() {
+interface TattooModalProps {
+  citas: CitaTatuaje[];
+}
+
+export default function TattooModal({ citas }: TattooModalProps) {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const cita = CITAS_MOCK.find(c => c.id === id);
+  const cita = citas.find(c => c.id === id);
 
   if (!cita) {
     return <div style={{ padding: '20px' }}><h3> La cita no existe.</h3></div>;
