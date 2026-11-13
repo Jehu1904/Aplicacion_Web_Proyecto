@@ -42,6 +42,8 @@ coverage/
 # Directorios temporales
 temp/
 tmp/
+/supabase/.temp/
+.tsupgrader/
 
 # Archivos de video (backup demo)
 *.mp4

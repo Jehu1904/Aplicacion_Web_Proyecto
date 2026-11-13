@@ -74,6 +74,7 @@ input[type="text"],
 input[type="email"],
 input[type="date"], /* Agregado por si usas input date */
 input[type="number"],
+input[type="file"],
 select,
 textarea {
     width: 100%;
@@ -84,6 +85,67 @@ textarea {
     border-radius: 6px;
     font-family: inherit;
     box-sizing: border-box; /* Importante para que no se desborde el ancho */
+}
+
+input[type="range"] {
+    width: 100%;
+}
+
+button:disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+.nota-cotizacion {
+    display: block;
+    color: #a8a8b3;
+    font-size: 0.78rem;
+    line-height: 1.5;
+    margin-top: 6px;
+}
+
+.error-imagen {
+    color: #ff7777;
+}
+
+.vista-previa-diseno {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: 10px;
+}
+
+.vista-previa-diseno img {
+    width: 76px;
+    height: 76px;
+    object-fit: cover;
+    border: 1px solid #29292e;
+    border-radius: 6px;
+}
+
+.vista-previa-diseno small {
+    color: #a8a8b3;
+}
+
+.resumen-analisis,
+.datos-abono {
+    display: grid;
+    gap: 5px;
+    padding: 12px;
+    border: 1px solid #29292e;
+    border-radius: 6px;
+    background: #121214;
+}
+
+.resumen-analisis span,
+.resumen-analisis small {
+    color: #a8a8b3;
+    line-height: 1.5;
+}
+
+.monto-abono {
+    color: #fbbf24;
+    margin-top: 5px;
 }
 
 .contenedor-costo {

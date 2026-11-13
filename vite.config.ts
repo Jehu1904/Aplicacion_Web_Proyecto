@@ -16,6 +16,7 @@ export default defineConfig({
     port: 5173,
     open: true,
     strictPort: true,
+    allowedHosts: ['pastrami-daredevil-grudging.ngrok-free.dev'],
     proxy: {
       '/react': {
         target: 'http://localhost:5174',
