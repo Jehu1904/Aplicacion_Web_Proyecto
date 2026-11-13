@@ -3,9 +3,9 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
-    "build": "ng build",
-    "watch": "ng build --watch --configuration development",
+    "start": "set \"NG_BUILD_MAX_WORKERS=1\" && ng serve",
+    "build": "set \"NG_BUILD_MAX_WORKERS=1\" && ng build",
+    "watch": "set \"NG_BUILD_MAX_WORKERS=1\" && ng build --watch --configuration development",
     "test": "ng test"
   },
   "private": true,

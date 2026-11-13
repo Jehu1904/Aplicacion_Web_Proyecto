@@ -75,6 +75,14 @@
                     <div class="flex-1 h-px bg-white/10"></div>
                 </div>
 
+                <button
+                    type="button"
+                    onclick="continuarConGoogle()"
+                    class="w-full bg-white text-zinc-900 hover:bg-zinc-200 font-semibold py-3 rounded-lg transition duration-200 text-sm"
+                >
+                    Continuar con Google
+                </button>
+
                 <p class="text-center text-sm text-gray-400">
                     ¿No tienes cuenta?
                     <button type="button" onclick="mostrarRegistro()" class="text-amber-400 hover:text-amber-300 font-medium transition">
@@ -102,7 +110,29 @@
                 </div>
 
                 <div>
-                    <label for="register-password" class="block text-sm font-medium text-gray-300 mb-2">Contraseña nueva</label>
+                    <label for="register-full-name" class="block text-sm font-medium text-gray-300 mb-2">Nombre completo</label>
+                    <input
+                        id="register-full-name"
+                        type="text"
+                        required
+                        placeholder="Tu nombre y apellido"
+                        class="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400 transition"
+                    >
+                </div>
+
+                <div>
+                    <label for="register-phone" class="block text-sm font-medium text-gray-300 mb-2">Teléfono</label>
+                    <input
+                        id="register-phone"
+                        type="tel"
+                        required
+                        placeholder="Ej. 099 123 4567"
+                        class="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400 transition"
+                    >
+                </div>
+
+                <div>
+                    <label for="register-password" class="block text-sm font-medium text-gray-300 mb-2">Ingresar Contraseña</label>
                     <input
                         id="register-password"
                         type="password"
@@ -125,6 +155,20 @@
 
                 <div id="register-error-message" class="hidden bg-red-500/10 border border-red-500/20 rounded-lg p-3 text-red-400 text-sm"></div>
                 <div id="register-success-message" class="hidden bg-emerald-500/10 border border-emerald-500/20 rounded-lg p-3 text-emerald-400 text-sm"></div>
+
+                <button
+                    type="button"
+                    onclick="continuarConGoogle()"
+                    class="w-full bg-white text-zinc-900 hover:bg-zinc-200 font-semibold py-3 rounded-lg transition duration-200 text-sm"
+                >
+                    Continuar con Google
+                </button>
+
+                <div class="flex items-center gap-2">
+                    <div class="flex-1 h-px bg-white/10"></div>
+                    <span class="text-xs text-gray-500">o crea con correo</span>
+                    <div class="flex-1 h-px bg-white/10"></div>
+                </div>
 
                 <div class="grid grid-cols-2 gap-3 pt-2">
                     <button
@@ -159,6 +203,10 @@
         <nav class="fixed top-0 w-full z-50 bg-[#0f0f0f]/95 backdrop-blur-md border-b border-white/5">
             <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
                 <div class="flex items-center gap-4">
+                    <button type="button" onclick="cargarModulo('perfil')" class="w-10 h-10 rounded-full overflow-hidden border border-amber-400/50 bg-amber-500 text-zinc-900 font-bold grid place-items-center hover:border-amber-300 transition" title="Abrir mi perfil" aria-label="Abrir mi perfil">
+                        <img id="nav-avatar-image" class="hidden w-full h-full object-cover" alt="Foto de perfil">
+                        <span id="nav-avatar-fallback">U</span>
+                    </button>
                     <h1 class="font-['Playfair_Display'] text-2xl font-bold text-white">INK & IRON</h1>
                     <span id="user-role" class="text-xs bg-amber-500/20 text-amber-400 px-3 py-1 rounded-full font-medium"></span>
                 </div>
@@ -167,6 +215,7 @@
                         <button onclick="cargarModulo('home')" class="nav-btn active px-4 py-2 rounded text-sm font-medium transition" data-module="home">Inicio</button>
                         <button onclick="cargarModulo('react')" class="nav-btn px-4 py-2 rounded text-sm font-medium transition" data-module="react">Catálogo</button>
                         <button onclick="cargarModulo('vue')" class="nav-btn px-4 py-2 rounded text-sm font-medium transition" data-module="vue">Reservas</button>
+                        <button onclick="cargarModulo('historial')" class="nav-btn px-4 py-2 rounded text-sm font-medium transition" data-module="historial">Citas realizadas</button>
                         <button onclick="cargarModulo('admin')" id="admin-btn" class="nav-btn px-4 py-2 rounded text-sm font-medium transition hidden" data-module="admin">Admin</button>
                     </div>
                     <button onclick="cerrarSesion()" class="text-gray-400 hover:text-red-400 transition text-sm font-medium">Cerrar sesión</button>
@@ -194,6 +243,13 @@
                             <h3 class="text-xl font-bold mb-2">Agendar Cita</h3>
                             <p class="text-gray-400 text-sm mb-4">Reserva tu sesión de tatuaje con nuestros artistas profesionales. Disponibilidad en tiempo real.</p>
                             <span class="text-blue-400 text-sm font-medium">Reservar →</span>
+                        </div>
+
+                        <div class="bg-gradient-to-br from-emerald-900/20 to-emerald-900/5 border border-emerald-500/20 rounded-lg p-8 hover:border-emerald-500/40 transition cursor-pointer" onclick="cargarModulo('historial')">
+                            <div class="text-4xl mb-4">🗓️</div>
+                            <h3 class="text-xl font-bold mb-2">Mis Citas</h3>
+                            <p class="text-gray-400 text-sm mb-4">Consulta tus próximas reservas y el historial de sesiones realizadas.</p>
+                            <span class="text-emerald-400 text-sm font-medium">Ver historial →</span>
                         </div>
 
                         <!-- Card Admin (solo si es admin) -->
@@ -262,20 +318,24 @@
     </div>
 
     <script type="module">
-        import { supabase } from '/lib/supabase.ts';
+        import { supabase, SUPABASE_KEY, SUPABASE_URL } from '/lib/supabase.ts';
 
         const enDesarrolloLocal = ['localhost', '127.0.0.1'].includes(window.location.hostname);
         const rutas = enDesarrolloLocal
             ? {
                 home: null,
-                react: 'http://localhost:5174/react/',
-                vue: 'http://localhost:5176/vue/',
-                admin: 'http://localhost:4200/'
+                react: '/react/',
+                vue: '/vue/',
+                historial: '/vue/#/historial',
+                perfil: '/vue/#/perfil',
+                admin: '/angular/'
             }
             : {
                 home: null,
                 react: '/react/',
                 vue: '/vue/',
+                historial: '/vue/#/historial',
+                perfil: '/vue/#/perfil',
                 admin: '/angular/'
             };
 
@@ -329,12 +389,9 @@
 
                 const iframe = document.getElementById('module-frame');
                 const destinoBase = rutas[moduloSeguro] || '/';
-                const token = localStorage.getItem('token') || '';
-                const email = localStorage.getItem('user_email') || '';
-                const role = localStorage.getItem('user_role') || 'cliente';
-                const started = localStorage.getItem('session_start') || new Date().toISOString();
-                const query = new URLSearchParams({ token, email, role, started }).toString();
-                iframe.src = `${destinoBase}${destinoBase.includes('?') ? '&' : '?'}${query}`;
+                localStorage.setItem('supabase_url', SUPABASE_URL);
+                localStorage.setItem('supabase_key', SUPABASE_KEY);
+                iframe.src = destinoBase;
             }
 
             // Scroll al inicio
@@ -344,6 +401,11 @@
         // ===== GESTIÓN DE SESIÓN =====
         function esCorreoValido(correo) {
             return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(correo);
+        }
+
+        function capitalizarPrimeraLetra(valor) {
+            const texto = String(valor || '').trim();
+            return texto ? texto.charAt(0).toLocaleUpperCase('es-EC') + texto.slice(1) : '';
         }
 
         function mostrarMensajeLogin(tipo, mensaje) {
@@ -380,6 +442,60 @@
             successMsg.classList.remove('hidden');
         }
 
+        async function actualizarAvatarNavegacion() {
+            const image = document.getElementById('nav-avatar-image');
+            const fallback = document.getElementById('nav-avatar-fallback');
+            const email = localStorage.getItem('user_email') || '';
+            fallback.textContent = (email.charAt(0) || 'U').toUpperCase();
+            image.classList.add('hidden');
+            fallback.classList.remove('hidden');
+
+            const { data } = await supabase
+                .from('profiles')
+                .select('full_name, avatar_url')
+                .eq('email', email)
+                .maybeSingle();
+
+            if (data?.full_name) {
+                fallback.textContent = data.full_name.charAt(0).toUpperCase();
+            }
+            if (data?.avatar_url) {
+                image.src = data.avatar_url;
+                image.classList.remove('hidden');
+                fallback.classList.add('hidden');
+            }
+        }
+
+        function guardarSesionCliente(session, user) {
+            const email = (user?.email || '').toLowerCase();
+            if (!session || !email) return false;
+
+            localStorage.setItem('token', session.access_token);
+            localStorage.setItem('user_email', email);
+            localStorage.setItem('user_role', 'cliente');
+            localStorage.setItem('session_start', new Date().toISOString());
+            localStorage.setItem('mtc_session', JSON.stringify({
+                user: email,
+                role: 'cliente',
+                authenticated: true
+            }));
+            return true;
+        }
+
+        window.continuarConGoogle = async () => {
+            document.getElementById('register-error-message').classList.add('hidden');
+            const { error } = await supabase.auth.signInWithOAuth({
+                provider: 'google',
+                options: {
+                    redirectTo: window.location.origin + window.location.pathname
+                }
+            });
+
+            if (error) {
+                mostrarMensajeRegistro('error', error.message || 'No se pudo iniciar sesión con Google');
+            }
+        };
+
         window.procesarAcceso = async (modo, rol = 'cliente') => {
             const email = document.getElementById('email').value.trim();
             const password = document.getElementById('password').value.trim();
@@ -399,9 +515,6 @@
             try {
                 if (modo === 'login') {
                     const { data, error } = await supabase.auth.signInWithPassword({ email, password });
-                    // DEBUG: mostrar resultado en consola para obtener detalles en caso de fallo
-                    console.log('DEBUG signIn', { email, data, error });
-                    
                     if (error) {
                         mostrarMensajeLogin('error', error.message || 'Error de autenticación');
                         return;
@@ -410,9 +523,8 @@
                     if (data.session) {
                         const emailAutenticado = (data.user?.email || email).toLowerCase();
                         const rolSolicitado = rol === 'admin' ? 'admin' : 'cliente';
-                        const rolPorMetadata = (data.user?.user_metadata?.role || '').toString().toLowerCase();
                         const adminsPermitidos = new Set(['admin@inkiorn.com']);
-                        const esAdminAutorizado = rolPorMetadata === 'admin' || adminsPermitidos.has(emailAutenticado);
+                        const esAdminAutorizado = adminsPermitidos.has(emailAutenticado);
                         const rolFinal = (rolSolicitado === 'admin' && esAdminAutorizado) ? 'admin' : 'cliente';
 
                         if (rolSolicitado === 'cliente' && esAdminAutorizado) {
@@ -459,11 +571,15 @@
             const registerForm = document.getElementById('register-form');
             const loginForm = document.getElementById('login-form');
             const registerEmail = document.getElementById('register-email');
+            const fullName = document.getElementById('register-full-name');
+            const phone = document.getElementById('register-phone');
             const pass = document.getElementById('register-password');
             const passConfirm = document.getElementById('register-confirm-password');
             registerForm.classList.add('hidden');
             loginForm.classList.remove('hidden');
             registerEmail.value = '';
+            fullName.value = '';
+            phone.value = '';
             pass.value = '';
             passConfirm.value = '';
             document.getElementById('register-error-message').classList.add('hidden');
@@ -472,6 +588,8 @@
 
         window.crearCuentaCliente = async () => {
             const email = document.getElementById('register-email').value.trim().toLowerCase();
+            const fullName = capitalizarPrimeraLetra(document.getElementById('register-full-name').value);
+            const phone = document.getElementById('register-phone').value.trim();
             const password = document.getElementById('register-password').value.trim();
             const confirmPassword = document.getElementById('register-confirm-password').value.trim();
             document.getElementById('register-error-message').classList.add('hidden');
@@ -484,6 +602,18 @@
 
             if (!esCorreoValido(email)) {
                 mostrarMensajeRegistro('error', 'Ingresa un correo válido (debe incluir @ y dominio)');
+                return;
+            }
+
+            if (fullName.length < 3) {
+                mostrarMensajeRegistro('error', 'Ingresa tu nombre completo');
+                return;
+            }
+
+            document.getElementById('register-full-name').value = fullName;
+
+            if (phone.length < 7) {
+                mostrarMensajeRegistro('error', 'Ingresa un teléfono válido');
                 return;
             }
 
@@ -507,7 +637,10 @@
                     email,
                     password,
                     options: {
-                        data: { role: 'cliente' }
+                        data: {
+                            full_name: fullName,
+                            phone
+                        }
                     }
                 });
 
@@ -534,6 +667,7 @@
             document.getElementById('login-section').classList.add('hidden');
             document.getElementById('app-section').classList.remove('hidden');
             document.getElementById('user-role').textContent = rolActual === 'admin' ? 'Administrador' : 'Cliente';
+            actualizarAvatarNavegacion();
             
             // Mostrar botón admin solo si es admin
             if (rolActual === 'admin') {
@@ -561,6 +695,7 @@
 
         window.cerrarSesion = () => {
             if (confirm('¿Deseas cerrar sesión?')) {
+                void supabase.auth.signOut();
                 localStorage.removeItem('token');
                 localStorage.removeItem('user_email');
                 localStorage.removeItem('user_role');
@@ -586,10 +721,45 @@
             }
         }
 
-        // Verificar autenticación al cargar
-        if (localStorage.getItem('token')) {
-            iniciarAplicacion(localStorage.getItem('user_role') || 'cliente');
-        }
+        // Restaurar una sesión de correo o la sesión que Supabase devuelve tras Google.
+        (async () => {
+            const tokenGuardado = localStorage.getItem('token');
+            const { data, error } = await supabase.auth.getSession();
+            if (error) {
+                console.error('No se pudo restaurar la sesión de Supabase:', error.message);
+                if (tokenGuardado) {
+                    localStorage.removeItem('token');
+                    localStorage.removeItem('user_email');
+                    localStorage.removeItem('user_role');
+                    localStorage.removeItem('session_start');
+                    localStorage.removeItem('mtc_session');
+                    mostrarMensajeLogin('error', 'Tu sesión expiró. Inicia sesión nuevamente.');
+                }
+                return;
+            }
+
+            if (data.session?.access_token && data.session.user) {
+                const email = (data.session.user.email || '').toLowerCase();
+                const role = localStorage.getItem('user_role') === 'admin' && email === 'admin@inkiorn.com'
+                    ? 'admin'
+                    : 'cliente';
+                localStorage.setItem('token', data.session.access_token);
+                localStorage.setItem('user_email', email);
+                localStorage.setItem('user_role', role);
+                localStorage.setItem('session_start', localStorage.getItem('session_start') || new Date().toISOString());
+                iniciarAplicacion(role);
+                return;
+            }
+
+            if (tokenGuardado) {
+                localStorage.removeItem('token');
+                localStorage.removeItem('user_email');
+                localStorage.removeItem('user_role');
+                localStorage.removeItem('session_start');
+                localStorage.removeItem('mtc_session');
+                mostrarMensajeLogin('error', 'Tu sesión expiró. Inicia sesión nuevamente.');
+            }
+        })();
 
         window.addEventListener('hashchange', () => {
             if (!localStorage.getItem('token')) return;

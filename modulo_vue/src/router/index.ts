@@ -18,6 +18,16 @@ const routes: Array<RouteRecordRaw> = [
         name: 'DetalleCita',
         component: (): Promise<any> => import('../views/DetalleCitaView.vue'),
         props: true
+    },
+    {
+        path: '/perfil',
+        name: 'Perfil',
+        component: (): Promise<any> => import('../views/PerfilView.vue')
+    },
+    {
+        path: '/historial',
+        name: 'Historial',
+        component: (): Promise<any> => import('../views/HistorialView.vue')
     }
 ];
 

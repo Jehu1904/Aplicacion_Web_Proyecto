@@ -6,7 +6,7 @@
  * Ejecutar con: node scripts/verify-setup.js
  */
 
-import fs from 'fs-extra';
+import fs from 'node:fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
@@ -83,9 +83,14 @@ try {
   const vueRouter = fs.readFileSync(path.join(rootDir, 'modulo_vue/src/router/index.ts'), 'utf8');
   check('Vue: createWebHashHistory configurado', vueRouter.includes('createWebHashHistory'));
 
-  // Angular index.html debe tener base href /angular/
+  // Angular uses a relative base in development and /angular/ in production.
   const angularHtml = fs.readFileSync(path.join(rootDir, 'modulo_angular/src/index.html'), 'utf8');
-  check('Angular: base href /angular/ configurado', angularHtml.includes('base href="/angular/"'));
+  const angularBuildConfig = JSON.parse(fs.readFileSync(path.join(rootDir, 'modulo_angular/angular.json'), 'utf8'));
+  const angularProductionBase = angularBuildConfig.projects.modulo_angular.architect.build.configurations.production.baseHref;
+  check(
+    'Angular: base href de desarrollo y producción configurados',
+    angularHtml.includes('<base href="./">') && angularProductionBase === '/angular/'
+  );
 
 } catch (err) {
   console.error('⚠️  Error verificando archivos:', err.message);

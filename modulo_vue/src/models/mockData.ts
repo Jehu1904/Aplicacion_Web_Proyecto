@@ -20,45 +20,7 @@ export interface CitaTattoo {
     notasDiseno?: string;
 }
 
-// Datos iniciales normalizados según la ficha
-const datosIniciales: CitaTattoo[] = [
-    {
-        id: "1", 
-        cliente: "Jehu Villamar", 
-        artista: "Gerson Barber",
-        estilo: "Blackwork", 
-        fecha: "2026-07-03", 
-        precio: 112.50, 
-        estado: "confirmada",
-        emailCliente: "jehu@mail.com", 
-        tamanoCm: 15, 
-        zonaCuerpo: "Brazo"
-    },
-    {
-        id: "2", 
-        cliente: "Jordan Solórzano", 
-        artista: "Alex Tattoo",
-        estilo: "Realismo", 
-        fecha: "2026-07-04", 
-        precio: 225.00, 
-        estado: "pendiente",
-        emailCliente: "jordan@mail.com", 
-        tamanoCm: 20, 
-        zonaCuerpo: "Costillas"
-    },
-    {
-        id: "3", 
-        cliente: "Jesús Macías", 
-        artista: "Gerson Barber",
-        estilo: "Lettering", 
-        fecha: "2026-07-05", 
-        precio: 66.00, 
-        estado: "completada",
-        emailCliente: "jesus@mail.com", 
-        tamanoCm: 8, 
-        zonaCuerpo: "Antebrazo"
-    }
-];
+const datosIniciales: CitaTattoo[] = [];
 
 const listaGlobalCitas = ref<CitaTattoo[]>([...datosIniciales]);
 

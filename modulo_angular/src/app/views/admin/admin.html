@@ -21,16 +21,18 @@
           <option>Confirmada</option>
           <option>Pendiente</option>
           <option>En diseño</option>
+          <option>Completada</option>
           <option>Cancelada</option>
         </select>
       </label>
       <div class="admin-buttons">
         <button class="secondary" (click)="exportarCsv()">Exportar CSV</button>
         <button class="secondary" (click)="imprimir()">Imprimir Panel</button>
-        <button class="danger" (click)="logout()">Cerrar sesión</button>
       </div>
     </div>
   </header>
+
+  <p *ngIf="loadError()" class="admin-load-error">{{ loadError() }}</p>
 
   <section class="summary-grid">
     <div class="summary-card">
@@ -67,81 +69,93 @@
     </div>
   </section>
 
-  <section class="panel-card">
-    <h2>Crear nueva cita</h2>
-    <div class="form-grid">
+  <section class="panel-card invoice-panel">
+    <div class="section-header">
+      <div>
+        <h2>Facturación</h2>
+        <span>Busca una cita, actualiza su estado y genera su factura.</span>
+      </div>
+    </div>
+    <div class="invoice-controls">
       <label>
-        Cliente
-        <input
-          [ngModel]="nuevaCita().cliente"
-          (ngModelChange)="updateNuevaCita('cliente', $event)"
-          placeholder="Nombre del cliente"
-        />
+        Buscar cita
+        <input [value]="facturaBusqueda()" (input)="setFacturaBusqueda($any($event.target).value)" placeholder="Cliente, tatuador, fecha, estado o ID" />
       </label>
       <label>
-        Fecha
-        <input
-          type="date"
-          [ngModel]="nuevaCita().fecha"
-          (ngModelChange)="updateNuevaCita('fecha', $event)"
-        />
+        Cita
+        <select [value]="citaFacturaId()" (change)="seleccionarCitaFactura($any($event.target).value)">
+          <option value="">Selecciona una cita</option>
+          <option *ngFor="let cita of citasParaFacturar()" [value]="cita.id">{{ cita.cliente }} · {{ cita.fecha }} · {{ cita.estilo }}</option>
+        </select>
       </label>
-      <label>
-        Tatuador
-        <input
-          [ngModel]="nuevaCita().tatuador"
-          (ngModelChange)="updateNuevaCita('tatuador', $event)"
-          placeholder="Nombre del tatuador"
-        />
-      </label>
-      <label>
-        Estilo
-        <input
-          [ngModel]="nuevaCita().estilo"
-          (ngModelChange)="updateNuevaCita('estilo', $event)"
-          placeholder="Estilo de tatuaje"
-        />
-      </label>
-      <label>
-        Zona del cuerpo
-        <input
-          [ngModel]="nuevaCita().zonaCuerpo"
-          (ngModelChange)="updateNuevaCita('zonaCuerpo', $event)"
-          placeholder="Ej. Brazo, espalda"
-        />
-      </label>
-      <label>
+      <label *ngIf="citaFactura()">
         Estado
-        <select [ngModel]="nuevaCita().estado" (ngModelChange)="updateNuevaCita('estado', $event)">
+        <select [value]="estadoFactura()" (change)="estadoFactura.set($any($event.target).value); facturaMensaje.set('')">
           <option>Confirmada</option>
           <option>Pendiente</option>
           <option>En diseño</option>
+          <option>Completada</option>
           <option>Cancelada</option>
         </select>
       </label>
-      <label>
-        Precio
-        <input
-          type="number"
-          min="0"
-          [ngModel]="nuevaCita().precio"
-          (ngModelChange)="updateNuevaCita('precio', +$event)"
-          placeholder="Ej. 120"
-        />
-      </label>
-      <label class="label-span-2">
-        Observaciones
-        <textarea
-          [ngModel]="nuevaCita().observaciones"
-          (ngModelChange)="updateNuevaCita('observaciones', $event)"
-          placeholder="Notas para el artista o el cliente"
-        ></textarea>
-      </label>
+      <button *ngIf="citaFactura()" class="secondary" type="button" (click)="guardarEstadoFactura()">Guardar estado</button>
     </div>
-    <div class="form-actions">
-      <button class="primary" (click)="crearCita()">Añadir cita</button>
-      <button class="danger" (click)="restaurarPredeterminadas()">Restaurar predeterminadas</button>
+    <p *ngIf="citasParaFacturar().length === 0" class="empty-artists">
+      {{ facturaBusqueda() ? 'No hay citas que coincidan con la búsqueda.' : 'No hay citas disponibles para facturación.' }}
+    </p>
+    <p *ngIf="facturaMensaje()" class="invoice-success">{{ facturaMensaje() }}</p>
+
+    <article *ngIf="citaFactura() as cita; else sinFactura" class="invoice-preview">
+      <div class="invoice-heading"><div><span>INK &amp; IRON</span><h3>Factura de cita</h3></div><strong>N.° {{ cita.id.slice(0, 8).toUpperCase() }}</strong></div>
+      <div class="invoice-details"><span><b>Cliente:</b> {{ cita.cliente }}</span><span><b>Fecha:</b> {{ formatearFecha(cita.fecha) }}</span><span><b>Tatuador:</b> {{ cita.tatuador }}</span><span><b>Estado:</b> {{ estadoFactura() }}</span><span><b>Estilo:</b> {{ cita.estilo }}</span><span><b>Zona:</b> {{ cita.zonaCuerpo }}</span></div>
+      <p *ngIf="cita.observaciones" class="invoice-notes"><b>Observaciones:</b> {{ cita.observaciones }}</p>
+      <div class="invoice-total">Total: ${{ cita.precio.toFixed(2) }}</div>
+      <button class="primary" type="button" [disabled]="cita.estado !== 'Completada'" (click)="imprimirFactura()">Imprimir factura</button>
+      <p *ngIf="cita.estado !== 'Completada'" class="invoice-print-note">Guarda la cita como Completada para habilitar la impresión.</p>
+    </article>
+    <ng-template #sinFactura><p class="empty-artists">Selecciona una cita para preparar su factura.</p></ng-template>
+  </section>
+
+  <section class="panel-card artists-panel">
+    <div class="section-header">
+      <div>
+        <h2>Tatuadores</h2>
+        <span>Administra los nombres disponibles para las reservas.</span>
+      </div>
     </div>
+    <div class="artist-add-form">
+      <input [ngModel]="nuevoTatuador()" (ngModelChange)="nuevoTatuador.set($event)" (blur)="nuevoTatuador.set(capitalizarPrimeraLetra(nuevoTatuador()))" placeholder="Nombre del tatuador" (keydown.enter)="agregarTatuador(); $event.preventDefault()" />
+      <button class="primary" type="button" (click)="agregarTatuador()">Agregar tatuador</button>
+    </div>
+    <p *ngIf="artistError()" class="admin-load-error">{{ artistError() }}</p>
+    <p *ngIf="!artistError() && !tatuadores().length" class="empty-artists">Aún no hay tatuadores registrados.</p>
+    <div *ngIf="tatuadores().length" class="artist-list">
+      <div *ngFor="let tatuador of tatuadores()" class="artist-item">
+        <span>{{ tatuador.nombre }}</span>
+        <button class="danger" type="button" (click)="retirarTatuador(tatuador.id, tatuador.nombre)">Retirar</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="panel-card">
+    <div class="section-header">
+      <div>
+        <h2>Datos para abonos</h2>
+        <span>El cliente verá estos datos y el monto para transferir antes de enviar su solicitud.</span>
+      </div>
+    </div>
+    <form class="payment-settings-form" (ngSubmit)="guardarConfiguracionPago()">
+      <label>Banco<input [ngModel]="configuracionPago().bank_name" (ngModelChange)="updateConfiguracionPago('bank_name', $event)" name="bank_name" required /></label>
+      <label>Titular de la cuenta<input [ngModel]="configuracionPago().account_holder" (ngModelChange)="updateConfiguracionPago('account_holder', $event)" name="account_holder" required /></label>
+      <label>Tipo de cuenta<input [ngModel]="configuracionPago().account_type" (ngModelChange)="updateConfiguracionPago('account_type', $event)" name="account_type" placeholder="Ahorros o corriente" required /></label>
+      <label>Número de cuenta<input [ngModel]="configuracionPago().account_number" (ngModelChange)="updateConfiguracionPago('account_number', $event)" name="account_number" required /></label>
+      <label>Cédula/RUC del titular<input [ngModel]="configuracionPago().account_id_number" (ngModelChange)="updateConfiguracionPago('account_id_number', $event)" name="account_id_number" required /></label>
+      <label>Monto fijo del abono (USD)<input type="number" min="0.01" step="0.01" [ngModel]="configuracionPago().deposit_amount" (ngModelChange)="updateConfiguracionPago('deposit_amount', $event)" name="deposit_amount" required /></label>
+      <button class="primary" type="submit">Guardar datos de abono</button>
+    </form>
+    <p *ngIf="errorConfiguracionPago()" class="admin-load-error">{{ errorConfiguracionPago() }}</p>
+    <p *ngIf="mensajeConfiguracionPago()" class="invoice-success">{{ mensajeConfiguracionPago() }}</p>
+    <p class="payment-review-note">El comprobante no verifica por sí solo el pago. Revisa la transferencia en tu banca y luego confirma la cita desde su tarjeta.</p>
   </section>
 
   <section class="panel-card" id="panel-citas">
@@ -162,15 +176,15 @@
         </div>
         <div class="field-row">
           <label>Tatuador</label>
-          <input [(ngModel)]="cita.tatuador" />
+          <input [(ngModel)]="cita.tatuador" (blur)="cita.tatuador = capitalizarPrimeraLetra(cita.tatuador)" />
         </div>
         <div class="field-row">
           <label>Estilo</label>
-          <input [(ngModel)]="cita.estilo" />
+          <input [(ngModel)]="cita.estilo" (blur)="cita.estilo = capitalizarPrimeraLetra(cita.estilo)" />
         </div>
         <div class="field-row">
           <label>Zona</label>
-          <input [(ngModel)]="cita.zonaCuerpo" />
+          <input [(ngModel)]="cita.zonaCuerpo" (blur)="cita.zonaCuerpo = capitalizarPrimeraLetra(cita.zonaCuerpo)" />
         </div>
         <div class="field-row">
           <label>Estado</label>
@@ -178,6 +192,7 @@
             <option>Confirmada</option>
             <option>Pendiente</option>
             <option>En diseño</option>
+            <option>Completada</option>
             <option>Cancelada</option>
           </select>
         </div>
@@ -187,16 +202,53 @@
         </div>
         <div class="field-row field-row-span-2">
           <label>Observaciones</label>
-          <textarea [(ngModel)]="cita.observaciones"></textarea>
+          <textarea [(ngModel)]="cita.observaciones" (blur)="cita.observaciones = capitalizarPrimeraLetra(cita.observaciones)"></textarea>
+        </div>
+        <div *ngIf="cita.tattooReferenceUrl || cita.catalogImageUrl || cita.catalogDesignId" class="field-row field-row-span-2 attachment-preview">
+          <label>Referencia del tatuaje</label>
+          <a *ngIf="cita.catalogDesignId" [href]="cita.catalogImageUrl || '#'" target="_blank" rel="noopener noreferrer">Diseño del catálogo · ID {{ cita.catalogDesignId }}</a>
+          <a *ngIf="cita.tattooReferenceUrl" [href]="cita.tattooReferenceUrl" target="_blank" rel="noopener noreferrer">
+            <img [src]="cita.tattooReferenceUrl" alt="Referencia enviada por el cliente" />
+          </a>
+        </div>
+        <div *ngIf="cita.paymentReceiptUrl" class="field-row field-row-span-2">
+          <label>Comprobante de transferencia</label>
+          <a [href]="cita.paymentReceiptUrl" target="_blank" rel="noopener noreferrer">Abrir comprobante privado</a>
+        </div>
+        <div *ngIf="cita.aiAnalysis" class="field-row field-row-span-2">
+          <label>Análisis de IA</label>
+          <span>{{ cita.aiAnalysis.style }} · Complejidad {{ cita.aiAnalysis.complexity }} · Líneas {{ cita.aiAnalysis.lineDetail }} · Sombreado {{ cita.aiAnalysis.shading }} · Colores {{ cita.aiAnalysis.colors.join(', ') }}</span>
+        </div>
+        <div *ngIf="cita.estado === 'Pendiente'" class="field-row field-row-span-2 discount-editor">
+          <label>Precio final acordado (USD)</label>
+          <div class="discount-controls">
+            <input type="number" min="0" [max]="cita.precio" step="0.01" [ngModel]="precioFinalDescuento()[cita.id] ?? null" (ngModelChange)="setPrecioFinalDescuento(cita.id, $event)" [name]="'discount-' + cita.id" />
+            <button type="button" class="secondary" (click)="crearDescuento(cita)">Crear código de descuento</button>
+          </div>
+          <p *ngIf="codigosDescuento()[cita.id] && !erroresDescuento()[cita.id]" class="invoice-success">Código {{ codigosDescuento()[cita.id] }}: ${{ cita.precio.toFixed(2) }} → ${{ precioFinalFormateado(cita.id) }}. Se envió por el chat.</p>
+          <p *ngIf="erroresDescuento()[cita.id]" class="admin-load-error">{{ erroresDescuento()[cita.id] }}</p>
+        </div>
+        <div class="field-row field-row-span-2">
+          <button type="button" class="secondary" (click)="toggleChat(cita)"> {{ chatsAbiertos()[cita.id] ? 'Cerrar conversación' : 'Hablar con el cliente' }} </button>
+          <div *ngIf="chatsAbiertos()[cita.id]" class="appointment-chat">
+            <p *ngFor="let mensaje of mensajesCita()[cita.id] ?? []" [class]="mensaje.sender_role === 'admin' ? 'chat-message admin-message' : 'chat-message client-message'">
+              <strong>{{ mensaje.sender_role === 'admin' ? 'Admin' : 'Cliente' }}:</strong> {{ mensaje.body }}
+            </p>
+            <p *ngIf="erroresChat()[cita.id]" class="admin-load-error">{{ erroresChat()[cita.id] }}</p>
+            <div class="discount-controls">
+              <input [ngModel]="borradoresMensaje()[cita.id] ?? ''" (ngModelChange)="setBorradorMensaje(cita.id, $event)" [name]="'message-' + cita.id" placeholder="Escribe un mensaje" maxlength="2000" />
+              <button type="button" class="secondary" (click)="enviarMensaje(cita)">Enviar</button>
+            </div>
+          </div>
         </div>
         <div class="card-actions">
               <button
                 class="success"
                 type="button"
-                [disabled]="cita.estado === 'Confirmada'"
+                [disabled]="cita.estado === 'Confirmada' || !cita.paymentReceiptUrl"
                 (click)="confirmarCita(cita)"
               >
-                Confirmar cita
+                Verificar y confirmar pago
               </button>
           <button class="primary" (click)="guardar(cita)">Guardar</button>
           <button class="danger" (click)="eliminar(cita.id)">Eliminar</button>

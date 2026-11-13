@@ -8,6 +8,8 @@ function hydrateSessionFromQuery() {
   const email = params.get('email');
   const role = params.get('role');
   const started = params.get('started');
+  const supabaseUrl = params.get('supabaseUrl');
+  const supabaseKey = params.get('supabaseKey');
 
   if (token && email) {
     const safeRole = role === 'admin' ? 'admin' : 'cliente';
@@ -15,6 +17,10 @@ function hydrateSessionFromQuery() {
     localStorage.setItem('user_email', email);
     localStorage.setItem('user_role', safeRole);
     localStorage.setItem('session_start', started || new Date().toISOString());
+    if (supabaseUrl && supabaseKey) {
+      localStorage.setItem('supabase_url', supabaseUrl);
+      localStorage.setItem('supabase_key', supabaseKey);
+    }
 
     localStorage.setItem('mtc_session', JSON.stringify({
       user: email,
